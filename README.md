@@ -16,19 +16,33 @@ A simple, owner-focused accounting application for **Vijaya Garden**, a family-o
 
 ---
 
+## 📑 Table of Contents
+
+- [About](#-about)
+- [Designed for Vijaya Garden](#-designed-for-vijaya-garden)
+- [Features](#-features)
+- [Data Management](#️-data-management)
+- [Technology Stack](#️-technology-stack)
+- [Project Structure](#-project-structure)
+- [Getting Started](#-getting-started)
+- [Data & Privacy](#-data--privacy)
+- [Future Enhancements](#-future-enhancements)
+- [Why VijayaGreen?](#-why-vijayagreen)
+- [License](#-license)
+
+---
+
 ## 📖 About
 
 **VijayaGreen** is a simple accounting application created for **Vijaya Garden**, a family-owned garden and nursery business.
 
-The application provides one place to manage daily financial records, including income, expenses, customer receivables, supplier payables, transactions, and financial reports.
-
-VijayaGreen is designed to keep everyday business record-keeping simple and easy to manage.
+It provides one place to manage daily financial records, including income, expenses, customer receivables, supplier payables, transactions, and financial reports, keeping everyday record-keeping simple and easy to manage.
 
 ---
 
 ## 🏡 Designed for Vijaya Garden
 
-VijayaGreen is built around the day-to-day requirements of a garden and nursery business.
+VijayaGreen is built around the day-to-day needs of a garden and nursery business. It is designed primarily for the **owner**, with a simple interface that avoids complicated accounting workflows.
 
 The application helps the owner:
 
@@ -77,43 +91,32 @@ The goal is simple:
 ### 📒 Ledger
 
 - View income and expense transactions
-- Search transactions
-- Filter transactions
+- Search and filter transactions
 - View transaction details
-- View total income
-- View total expenses
-- View current balance
+- View total income, total expenses, and current balance
 
 ### 👥 Customer Management
 
-- Add customers
+- Add, view, edit, and delete customers
 - Store customer phone numbers
 - Record amounts to receive
-- View customer details
-- Edit customer records
-- Delete customer records
 - Search customers
 - View total receivables
 
 ### 🚚 Supplier Management
 
-- Add suppliers
+- Add, view, edit, and delete suppliers
 - Store supplier phone numbers
 - Record supply categories
 - Record amounts to pay
-- View supplier details
-- Edit supplier records
-- Delete supplier records
 - Search suppliers
 - View total payables
 
 ### 📊 Reports
 
 - Current balance
-- Total income
-- Total expenses
-- Income categories
-- Expense categories
+- Total income and total expenses
+- Income and expense categories
 - Net result
 - Monthly reporting information
 
@@ -127,88 +130,17 @@ The goal is simple:
 
 ---
 
-## 📱 Application Screens
-
-## 📸 Screenshots
-
-### 🔐 Login
-
-![VijayaGreen Login](screenshots/01_login.png)
-
-### 🏡 Dashboard
-
-![VijayaGreen Dashboard](screenshots/02_dashboard.png)
-
-### 💰 Income
-
-![VijayaGreen Income](screenshots/03_income.png)
-
-### 💸 Expense
-
-![VijayaGreen Expense](screenshots/04_expense.png)
-
-### 📒 Ledger
-
-![VijayaGreen Ledger](screenshots/05_ledger.png)
-
-### 👥 Customers
-
-![VijayaGreen Customers](screenshots/06_customers.png)
-
-### 🚚 Suppliers
-
-![VijayaGreen Suppliers](screenshots/07_suppliers.png)
-
-### 📊 Reports
-
-![VijayaGreen Reports](screenshots/08_reports.png)
-
-### 👤 Profile
-
-![VijayaGreen Profile](screenshots/09_profile.png)
-
----
-
 ## 🗄️ Data Management
 
-VijayaGreen uses a local **SQLite database** to store business records.
+VijayaGreen uses a local **SQLite database** to store business records. Data is stored on the device, so previously recorded information remains available after logging out and logging in again.
 
-The database currently manages:
+The database manages three types of records:
 
-- Financial transactions
-- Customer records
-- Supplier records
-
-### Transaction Information
-
-Transactions can contain:
-
-- Transaction type
-- Category
-- Amount
-- Date
-- Customer or supplier name
-- Description
-- Payment method
-
-### Customer Information
-
-Customer records include:
-
-- Customer name
-- Phone number
-- Amount to receive
-
-### Supplier Information
-
-Supplier records include:
-
-- Supplier name
-- Phone number
-- Supply category
-- Amount to pay
-
-The application stores this information locally, allowing previously recorded data to remain available after logging out and logging in again.
+| Record | Information stored |
+|---|---|
+| **Transactions** | Type, category, amount, date, customer/supplier name, description, payment method |
+| **Customers** | Name, phone number, amount to receive |
+| **Suppliers** | Name, phone number, supply category, amount to pay |
 
 ---
 
@@ -263,67 +195,53 @@ VijayaGreen/
 
 ### Prerequisites
 
-Make sure you have the following installed:
-
-- Flutter
-- Dart SDK
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (includes Dart)
 - Visual Studio Code or Android Studio
-- A supported Flutter development environment
+- A supported Flutter development platform (SQLite support is provided through the `sqflite` package)
 
-Check your Flutter installation:
+Verify your Flutter installation:
 
 ```bash
 flutter doctor
 ```
 
-### Clone the Repository
+### Installation
 
-```bash
-git clone https://github.com/aishwar-ya/VijayaGreen.git
-```
+1. **Clone the repository**
 
-### Navigate to the Project
+   ```bash
+   git clone https://github.com/aishwar-ya/VijayaGreen.git
+   ```
 
-```bash
-cd VijayaGreen
-```
+2. **Navigate to the project**
 
-### Install Dependencies
+   ```bash
+   cd VijayaGreen
+   ```
 
-```bash
-flutter pub get
-```
+3. **Install dependencies**
 
-### Run the Application
+   ```bash
+   flutter pub get
+   ```
 
-```bash
-flutter run
-```
+4. **Run the application**
 
-To run the application on Windows:
+   ```bash
+   flutter run
+   ```
 
-```bash
-flutter run -d windows
-```
+   To run on Windows:
 
----
-
-## 💻 Requirements
-
-VijayaGreen requires:
-
-- Flutter SDK
-- Dart SDK
-- A supported Flutter development platform
-- SQLite support through the `sqflite` package
+   ```bash
+   flutter run -d windows
+   ```
 
 ---
 
 ## 🔐 Data & Privacy
 
-VijayaGreen is designed primarily for the internal use of Vijaya Garden.
-
-Business records are stored locally using SQLite.
+VijayaGreen is designed primarily for the internal use of Vijaya Garden, and business records are stored locally using SQLite.
 
 The public GitHub repository should not contain:
 
@@ -332,8 +250,6 @@ The public GitHub repository should not contain:
 - Personal financial information
 - API keys
 - Other confidential business information
-
-The current version is designed as a local, owner-focused accounting application.
 
 ---
 
@@ -350,14 +266,6 @@ Possible future improvements include:
 - 💾 Database backup and restore
 
 > These are potential future enhancements and are not part of the current implementation.
-
----
-
-## 👤 User Role
-
-VijayaGreen is currently designed primarily for the owner of Vijaya Garden.
-
-The application keeps the interface simple so that daily income, expenses, customers, suppliers, and financial reports can be managed without complicated accounting workflows.
 
 ---
 
