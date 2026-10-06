@@ -11,6 +11,20 @@ class ReportsScreen extends StatefulWidget {
 
 class _ReportsScreenState extends State<ReportsScreen> {
   // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
+  // ============================================================
   // DATABASE DATA
   // ============================================================
 
@@ -158,7 +172,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -218,45 +234,45 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }
 
   // ============================================================
-  // CATEGORY COLORS
+  // CATEGORY COLOR
   // ============================================================
 
   Color _getCategoryColor(int index, bool isIncome) {
     if (isIncome) {
       const colors = [
-        Color(0xFF2E7D32),
-        Color(0xFF388E3C),
-        Color(0xFF558B2F),
-        Color(0xFF689F38),
-        Color(0xFF1B5E20),
+        mainGreen,
+        olive,
+        deepForest,
+        Color(0xFF587A45),
+        Color(0xFF8A9A4A),
       ];
 
       return colors[index % colors.length];
     }
 
     const colors = [
-      Color(0xFFC62828),
-      Color(0xFFE65100),
-      Color(0xFFAD6800),
-      Color(0xFF8D6E63),
-      Color(0xFF6D4C41),
+      errorRed,
+      Color(0xFFB85C38),
+      Color(0xFF9A6B2F),
+      Color(0xFF8A735D),
+      Color(0xFF765548),
     ];
 
     return colors[index % colors.length];
   }
 
   // ============================================================
-  // CATEGORY BACKGROUND COLORS
+  // CATEGORY BACKGROUND
   // ============================================================
 
   Color _getCategoryBackground(int index, bool isIncome) {
     if (isIncome) {
       const colors = [
-        Color(0xFFE8F5E9),
-        Color(0xFFE8F5E9),
-        Color(0xFFF1F8E9),
-        Color(0xFFF1F8E9),
-        Color(0xFFE8F5E9),
+        Color(0xFFE8F0E8),
+        Color(0xFFF1F4E5),
+        Color(0xFFE6EEE9),
+        Color(0xFFF2F5E9),
+        Color(0xFFE9EFE5),
       ];
 
       return colors[index % colors.length];
@@ -264,10 +280,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
     const colors = [
       Color(0xFFFFEBEE),
-      Color(0xFFFFF3E0),
+      Color(0xFFFFF1E8),
       Color(0xFFFFF8E1),
       Color(0xFFFBE9E7),
-      Color(0xFFEFEBE9),
+      Color(0xFFF1EAE5),
     ];
 
     return colors[index % colors.length];
@@ -280,35 +296,32 @@ class _ReportsScreenState extends State<ReportsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
-      // ========================================================
+      // ==========================================================
       // APP BAR
-      // ========================================================
+      // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
 
         title: const Text(
           'Reports',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
 
         actions: [
           IconButton(
             onPressed: _loadReportData,
-            icon: const Icon(Icons.refresh, color: Color(0xFF1B5E20)),
+            icon: const Icon(Icons.refresh, color: deepForest),
             tooltip: 'Refresh',
           ),
 
@@ -316,39 +329,33 @@ class _ReportsScreenState extends State<ReportsScreen> {
         ],
       ),
 
-      // ========================================================
+      // ==========================================================
       // BODY
-      // ========================================================
+      // ==========================================================
       body: SafeArea(
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
-              )
+            ? const Center(child: CircularProgressIndicator(color: gold))
             : RefreshIndicator(
-                color: const Color(0xFF2E7D32),
+                color: gold,
+                backgroundColor: softCream,
                 onRefresh: _loadReportData,
-
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 30),
-
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 900),
-
+                      constraints: const BoxConstraints(maxWidth: 390),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-
                         children: [
-                          // ==================================================
+                          // ========================================
                           // TITLE
-                          // ==================================================
+                          // ========================================
 
                           const Text(
                             'Financial Overview',
                             style: TextStyle(
-                              color: Color(0xFF26332A),
+                              color: deepForest,
                               fontSize: 20,
                               fontWeight: FontWeight.bold,
                             ),
@@ -358,24 +365,24 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
                           Text(
                             'Vijaya Garden • $currentMonthYear',
-                            style: TextStyle(
-                              color: Colors.grey.shade600,
+                            style: const TextStyle(
+                              color: mutedText,
                               fontSize: 12,
                             ),
                           ),
 
                           const SizedBox(height: 20),
 
-                          // ==================================================
+                          // ========================================
                           // BALANCE
-                          // ==================================================
+                          // ========================================
                           _buildBalanceCard(),
 
                           const SizedBox(height: 18),
 
-                          // ==================================================
+                          // ========================================
                           // SUMMARY
-                          // ==================================================
+                          // ========================================
                           Row(
                             children: [
                               Expanded(
@@ -383,8 +390,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   title: 'Total Income',
                                   amount: totalIncome,
                                   icon: Icons.trending_up,
-                                  color: const Color(0xFF2E7D32),
-                                  backgroundColor: const Color(0xFFE8F5E9),
+                                  color: mainGreen,
+                                  backgroundColor: const Color(0xFFE8F0E8),
                                 ),
                               ),
 
@@ -395,7 +402,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                                   title: 'Total Expenses',
                                   amount: totalExpenses,
                                   icon: Icons.trending_down,
-                                  color: const Color(0xFFC62828),
+                                  color: errorRed,
                                   backgroundColor: const Color(0xFFFFEBEE),
                                 ),
                               ),
@@ -404,13 +411,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
                           const SizedBox(height: 28),
 
-                          // ==================================================
+                          // ========================================
                           // INCOME BY CATEGORY
-                          // ==================================================
+                          // ========================================
                           const Text(
                             'Income by Category',
                             style: TextStyle(
-                              color: Color(0xFF26332A),
+                              color: deepForest,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -423,23 +430,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           else
                             ...incomeCategories.asMap().entries.map((entry) {
                               final index = entry.key;
-
                               final category = entry.value;
 
                               return _buildCategoryCard(
                                 title: category['title'].toString(),
-
                                 amount: category['amount'] as double,
-
                                 percentage: category['percentage'] as int,
-
                                 icon: _getCategoryIcon(
                                   category['title'].toString(),
                                   true,
                                 ),
-
                                 color: _getCategoryColor(index, true),
-
                                 backgroundColor: _getCategoryBackground(
                                   index,
                                   true,
@@ -449,13 +450,13 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
                           const SizedBox(height: 12),
 
-                          // ==================================================
+                          // ========================================
                           // EXPENSES BY CATEGORY
-                          // ==================================================
+                          // ========================================
                           const Text(
                             'Expenses by Category',
                             style: TextStyle(
-                              color: Color(0xFF26332A),
+                              color: deepForest,
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
                             ),
@@ -468,23 +469,17 @@ class _ReportsScreenState extends State<ReportsScreen> {
                           else
                             ...expenseCategories.asMap().entries.map((entry) {
                               final index = entry.key;
-
                               final category = entry.value;
 
                               return _buildCategoryCard(
                                 title: category['title'].toString(),
-
                                 amount: category['amount'] as double,
-
                                 percentage: category['percentage'] as int,
-
                                 icon: _getCategoryIcon(
                                   category['title'].toString(),
                                   false,
                                 ),
-
                                 color: _getCategoryColor(index, false),
-
                                 backgroundColor: _getCategoryBackground(
                                   index,
                                   false,
@@ -494,9 +489,9 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
                           const SizedBox(height: 22),
 
-                          // ==================================================
+                          // ========================================
                           // PROFIT / LOSS
-                          // ==================================================
+                          // ========================================
                           _buildProfitCard(),
                         ],
                       ),
@@ -518,38 +513,60 @@ class _ReportsScreenState extends State<ReportsScreen> {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(22),
-
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+          colors: [deepForest, mainGreen],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-
         borderRadius: BorderRadius.circular(22),
-
+        border: Border.all(color: gold, width: 1),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.18),
-
+            color: deepForest.withValues(alpha: 0.18),
             blurRadius: 18,
-
             offset: const Offset(0, 8),
           ),
         ],
       ),
-
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-
         children: [
-          const Text(
-            'Current Balance',
-            style: TextStyle(color: Colors.white70, fontSize: 13),
+          Row(
+            children: [
+              const Expanded(
+                child: Text(
+                  'Current Balance',
+                  style: TextStyle(color: Colors.white70, fontSize: 13),
+                ),
+              ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 13,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: gold),
+                ),
+                child: const Text(
+                  'All Transactions',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
 
           Text(
-            '₹${currentBalance.toStringAsFixed(0)}',
+            '₹${currentBalance.toStringAsFixed(2)}',
             style: const TextStyle(
               color: Colors.white,
               fontSize: 30,
@@ -557,13 +574,25 @@ class _ReportsScreenState extends State<ReportsScreen> {
             ),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 7),
 
-          Text(
-            isPositive
-                ? 'Income minus expenses'
-                : 'Expenses are higher than income',
-            style: const TextStyle(color: Colors.white70, fontSize: 11),
+          Row(
+            children: [
+              Icon(
+                isPositive ? Icons.trending_up : Icons.trending_down,
+                color: gold,
+                size: 19,
+              ),
+
+              const SizedBox(width: 7),
+
+              Text(
+                isPositive
+                    ? 'Income minus expenses'
+                    : 'Expenses are higher than income',
+                style: const TextStyle(color: Colors.white70, fontSize: 11),
+              ),
+            ],
           ),
         ],
       ),
@@ -583,25 +612,27 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }) {
     return Container(
       padding: const EdgeInsets.all(16),
-
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.035),
+            blurRadius: 7,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-
       child: Row(
         children: [
           Container(
             width: 40,
             height: 40,
-
             decoration: BoxDecoration(
               color: backgroundColor,
               shape: BoxShape.circle,
             ),
-
             child: Icon(icon, color: color, size: 21),
           ),
 
@@ -610,11 +641,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 Text(
                   title,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  style: const TextStyle(color: mutedText, fontSize: 12),
                 ),
 
                 const SizedBox(height: 4),
@@ -622,7 +652,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 Text(
                   '₹${amount.toStringAsFixed(0)}',
                   style: const TextStyle(
-                    color: Color(0xFF26332A),
+                    color: deepForest,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -649,16 +679,19 @@ class _ReportsScreenState extends State<ReportsScreen> {
   }) {
     return Container(
       margin: const EdgeInsets.only(bottom: 10),
-
       padding: const EdgeInsets.all(15),
-
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.03),
+            blurRadius: 6,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
-
       child: Column(
         children: [
           Row(
@@ -666,12 +699,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
               Container(
                 width: 40,
                 height: 40,
-
                 decoration: BoxDecoration(
                   color: backgroundColor,
                   shape: BoxShape.circle,
                 ),
-
                 child: Icon(icon, color: color, size: 20),
               ),
 
@@ -681,6 +712,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 child: Text(
                   title,
                   style: const TextStyle(
+                    color: deepForest,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -705,14 +737,10 @@ class _ReportsScreenState extends State<ReportsScreen> {
               Expanded(
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10),
-
                   child: LinearProgressIndicator(
                     value: (percentage / 100).clamp(0.0, 1.0),
-
                     minHeight: 7,
-
-                    backgroundColor: Colors.grey.shade100,
-
+                    backgroundColor: const Color(0xFFE9EEE9),
                     valueColor: AlwaysStoppedAnimation<Color>(color),
                   ),
                 ),
@@ -722,8 +750,8 @@ class _ReportsScreenState extends State<ReportsScreen> {
 
               Text(
                 '$percentage%',
-                style: TextStyle(
-                  color: Colors.grey.shade600,
+                style: const TextStyle(
+                  color: mutedText,
                   fontSize: 11,
                   fontWeight: FontWeight.w600,
                 ),
@@ -742,29 +770,20 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildEmptyCategoryState(String message) {
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 20),
-
       margin: const EdgeInsets.only(bottom: 10),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(16),
-
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
       ),
-
       child: Column(
         children: [
-          Icon(Icons.bar_chart_outlined, size: 40, color: Colors.grey.shade400),
+          const Icon(Icons.bar_chart_outlined, size: 40, color: olive),
 
           const SizedBox(height: 8),
 
-          Text(
-            message,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-          ),
+          Text(message, style: const TextStyle(fontSize: 12, color: mutedText)),
         ],
       ),
     );
@@ -777,41 +796,33 @@ class _ReportsScreenState extends State<ReportsScreen> {
   Widget _buildProfitCard() {
     final bool isPositive = currentBalance >= 0;
 
-    final Color mainColor = isPositive
-        ? const Color(0xFF2E7D32)
-        : const Color(0xFFC62828);
+    final Color mainColor = isPositive ? mainGreen : errorRed;
 
     final Color lightColor = isPositive
-        ? const Color(0xFFE8F5E9)
+        ? const Color(0xFFE8F0E8)
         : const Color(0xFFFFEBEE);
 
     final Color borderColor = isPositive
-        ? const Color(0xFFC8E6C9)
+        ? borderGreen
         : const Color(0xFFFFCDD2);
 
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
         color: lightColor,
-
         borderRadius: BorderRadius.circular(18),
-
         border: Border.all(color: borderColor),
       ),
-
       child: Row(
         children: [
           Container(
             width: 48,
             height: 48,
-
             decoration: const BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
             ),
-
             child: Icon(
               isPositive ? Icons.trending_up : Icons.trending_down,
               color: mainColor,
@@ -824,14 +835,11 @@ class _ReportsScreenState extends State<ReportsScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 Text(
                   'Net Result',
                   style: TextStyle(
-                    color: isPositive
-                        ? const Color(0xFF1B5E20)
-                        : const Color(0xFFC62828),
+                    color: mainColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
                   ),
@@ -853,9 +861,7 @@ class _ReportsScreenState extends State<ReportsScreen> {
                 Text(
                   isPositive ? 'Positive balance' : 'Negative balance',
                   style: TextStyle(
-                    color: isPositive
-                        ? const Color(0xFF558B2F)
-                        : const Color(0xFFC62828),
+                    color: isPositive ? olive : errorRed,
                     fontSize: 11,
                   ),
                 ),

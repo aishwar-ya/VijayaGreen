@@ -5,31 +5,43 @@ import 'login_screen.dart';
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
 
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
       // ==========================================================
       // APP BAR
       // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
 
         title: const Text(
           'Profile',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
       ),
 
@@ -41,7 +53,7 @@ class ProfileScreen extends StatelessWidget {
           padding: const EdgeInsets.fromLTRB(20, 8, 20, 30),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 800),
+              constraints: const BoxConstraints(maxWidth: 390),
               child: Column(
                 children: [
                   _buildProfileHeader(),
@@ -73,10 +85,10 @@ class ProfileScreen extends StatelessWidget {
                         fit: BoxFit.contain,
                       ),
                       const SizedBox(width: 7),
-                      Text(
+                      const Text(
                         'VijayaGreen',
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: mutedText,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                         ),
@@ -86,9 +98,9 @@ class ProfileScreen extends StatelessWidget {
 
                   const SizedBox(height: 5),
 
-                  Text(
+                  const Text(
                     'Garden Accounts Made Simple',
-                    style: TextStyle(color: Colors.grey.shade500, fontSize: 11),
+                    style: TextStyle(color: mutedText, fontSize: 11),
                   ),
                 ],
               ),
@@ -109,12 +121,15 @@ class ProfileScreen extends StatelessWidget {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+          colors: [deepForest, mainGreen],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: gold, width: 1),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.18),
+            color: deepForest.withValues(alpha: 0.18),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -131,12 +146,9 @@ class ProfileScreen extends StatelessWidget {
             height: 86,
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.18),
+              color: Colors.white.withValues(alpha: 0.14),
               shape: BoxShape.circle,
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.35),
-                width: 2,
-              ),
+              border: Border.all(color: gold.withValues(alpha: 0.7), width: 2),
             ),
             child: ClipOval(
               child: Image.asset(
@@ -166,21 +178,20 @@ class ProfileScreen extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          // Garden name
+          // ========================================================
+          // GARDEN NAME
+          // ========================================================
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.14),
+              color: gold.withValues(alpha: 0.12),
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: gold.withValues(alpha: 0.55)),
             ),
             child: const Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  Icons.local_florist_outlined,
-                  color: Colors.white,
-                  size: 16,
-                ),
+                Icon(Icons.local_florist_outlined, color: gold, size: 16),
                 SizedBox(width: 6),
                 Text(
                   'VIJAYA GARDEN',
@@ -209,7 +220,14 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.03),
+            blurRadius: 7,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -217,7 +235,7 @@ class ProfileScreen extends StatelessWidget {
           const Text(
             'Garden Information',
             style: TextStyle(
-              color: Color(0xFF26332A),
+              color: deepForest,
               fontSize: 17,
               fontWeight: FontWeight.bold,
             ),
@@ -231,7 +249,7 @@ class ProfileScreen extends StatelessWidget {
             value: 'VIJAYA GARDEN',
           ),
 
-          const Divider(height: 24),
+          const Divider(height: 24, color: borderGreen),
 
           _buildInfoRow(
             icon: Icons.person_outline,
@@ -239,7 +257,7 @@ class ProfileScreen extends StatelessWidget {
             value: 'ayshu',
           ),
 
-          const Divider(height: 24),
+          const Divider(height: 24, color: borderGreen),
 
           _buildInfoRow(
             icon: Icons.business_outlined,
@@ -266,10 +284,10 @@ class ProfileScreen extends StatelessWidget {
           width: 42,
           height: 42,
           decoration: const BoxDecoration(
-            color: Color(0xFFE8F5E9),
+            color: Color(0xFFE8F0E8),
             shape: BoxShape.circle,
           ),
-          child: Icon(icon, color: const Color(0xFF2E7D32), size: 21),
+          child: Icon(icon, color: mainGreen, size: 21),
         ),
 
         const SizedBox(width: 12),
@@ -280,7 +298,7 @@ class ProfileScreen extends StatelessWidget {
             children: [
               Text(
                 title,
-                style: TextStyle(color: Colors.grey.shade600, fontSize: 11),
+                style: const TextStyle(color: mutedText, fontSize: 11),
               ),
 
               const SizedBox(height: 3),
@@ -288,7 +306,7 @@ class ProfileScreen extends StatelessWidget {
               Text(
                 value,
                 style: const TextStyle(
-                  color: Color(0xFF26332A),
+                  color: deepForest,
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
@@ -310,7 +328,14 @@ class ProfileScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.03),
+            blurRadius: 7,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Column(
         children: [
@@ -321,7 +346,7 @@ class ProfileScreen extends StatelessWidget {
               child: Text(
                 'Settings',
                 style: TextStyle(
-                  color: Color(0xFF26332A),
+                  color: deepForest,
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                 ),
@@ -338,7 +363,7 @@ class ProfileScreen extends StatelessWidget {
             },
           ),
 
-          const Divider(height: 1),
+          const Divider(height: 1, color: borderGreen),
 
           _buildSettingTile(
             icon: Icons.info_outline,
@@ -370,10 +395,10 @@ class ProfileScreen extends StatelessWidget {
         width: 42,
         height: 42,
         decoration: const BoxDecoration(
-          color: Color(0xFFE8F5E9),
+          color: Color(0xFFE8F0E8),
           shape: BoxShape.circle,
         ),
-        child: Icon(icon, color: const Color(0xFF2E7D32), size: 21),
+        child: Icon(icon, color: mainGreen, size: 21),
       ),
 
       title: Text(
@@ -381,16 +406,16 @@ class ProfileScreen extends StatelessWidget {
         style: const TextStyle(
           fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: Color(0xFF26332A),
+          color: deepForest,
         ),
       ),
 
       subtitle: Text(
         subtitle,
-        style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+        style: const TextStyle(fontSize: 11, color: mutedText),
       ),
 
-      trailing: const Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: const Icon(Icons.chevron_right, color: mutedText),
 
       onTap: onTap,
     );
@@ -409,18 +434,19 @@ class ProfileScreen extends StatelessWidget {
           _showLogoutDialog(context);
         },
 
-        icon: const Icon(Icons.logout, color: Color(0xFFC62828)),
+        icon: const Icon(Icons.logout, color: errorRed),
 
         label: const Text(
           'Logout',
           style: TextStyle(
-            color: Color(0xFFC62828),
+            color: errorRed,
             fontSize: 15,
             fontWeight: FontWeight.bold,
           ),
         ),
 
         style: OutlinedButton.styleFrom(
+          backgroundColor: const Color(0xFFFFFAFA),
           side: const BorderSide(color: Color(0xFFE57373)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(14),
@@ -438,8 +464,9 @@ class ProfileScreen extends StatelessWidget {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$feature will be added later 🌿'),
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
         behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),
     );
   }
@@ -453,6 +480,7 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -461,11 +489,19 @@ class ProfileScreen extends StatelessWidget {
 
           title: Column(
             children: [
-              Image.asset(
-                'assets/images/vijayagreen_icon.png',
-                width: 58,
-                height: 58,
-                fit: BoxFit.contain,
+              Container(
+                width: 70,
+                height: 70,
+                padding: const EdgeInsets.all(6),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F0E8),
+                  shape: BoxShape.circle,
+                  border: Border.all(color: gold),
+                ),
+                child: Image.asset(
+                  'assets/images/vijayagreen_icon.png',
+                  fit: BoxFit.contain,
+                ),
               ),
 
               const SizedBox(height: 12),
@@ -474,7 +510,7 @@ class ProfileScreen extends StatelessWidget {
                 'VijayaGreen',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: Color(0xFF1B5E20),
+                  color: deepForest,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -487,7 +523,7 @@ class ProfileScreen extends StatelessWidget {
             'manage income, expenses, customers, suppliers '
             'and financial reports.',
             textAlign: TextAlign.center,
-            style: TextStyle(height: 1.5),
+            style: TextStyle(color: mutedText, height: 1.5, fontSize: 13),
           ),
 
           actions: [
@@ -497,7 +533,7 @@ class ProfileScreen extends StatelessWidget {
               },
               child: const Text(
                 'Close',
-                style: TextStyle(color: Color(0xFF2E7D32)),
+                style: TextStyle(color: mainGreen, fontWeight: FontWeight.w600),
               ),
             ),
           ],
@@ -515,23 +551,27 @@ class ProfileScreen extends StatelessWidget {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
 
           title: const Text(
             'Logout',
-            style: TextStyle(fontWeight: FontWeight.bold),
+            style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
           ),
 
-          content: const Text('Are you sure you want to logout?'),
+          content: const Text(
+            'Are you sure you want to logout?',
+            style: TextStyle(color: mutedText),
+          ),
 
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
               },
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
 
             ElevatedButton(
@@ -545,9 +585,12 @@ class ProfileScreen extends StatelessWidget {
               },
 
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFFC62828),
+                backgroundColor: errorRed,
                 foregroundColor: Colors.white,
                 elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
 
               child: const Text('Logout'),

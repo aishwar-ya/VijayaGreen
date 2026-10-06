@@ -10,10 +10,33 @@ class SuppliersScreen extends StatefulWidget {
 }
 
 class _SuppliersScreenState extends State<SuppliersScreen> {
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
+  // ============================================================
+  // STATE
+  // ============================================================
+
   final TextEditingController searchController = TextEditingController();
 
   List<Map<String, dynamic>> suppliers = [];
+
   bool isLoading = true;
+
+  // ============================================================
+  // INIT
+  // ============================================================
 
   @override
   void initState() {
@@ -107,7 +130,9 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -129,71 +154,70 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
+      // ==========================================================
+      // APP BAR
+      // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
 
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
 
         title: const Text(
           'Suppliers',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
 
         actions: [
           IconButton(
             onPressed: _refreshSuppliers,
-            icon: const Icon(Icons.refresh, color: Color(0xFF1B5E20)),
+            icon: const Icon(Icons.refresh, color: deepForest),
             tooltip: 'Refresh',
           ),
         ],
       ),
 
+      // ==========================================================
+      // BODY
+      // ==========================================================
       body: SafeArea(
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
-              )
+            ? const Center(child: CircularProgressIndicator(color: gold))
             : RefreshIndicator(
-                color: const Color(0xFF2E7D32),
+                color: gold,
+                backgroundColor: softCream,
                 onRefresh: _refreshSuppliers,
-
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
-
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 30),
-
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 800),
-
+                      constraints: const BoxConstraints(maxWidth: 390),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-
                         children: [
                           _buildSummaryCard(),
 
                           const SizedBox(height: 22),
 
+                          // ========================================
                           // SUPPLIER LIST HEADER
+                          // ========================================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                             children: [
                               const Text(
                                 'Supplier List',
                                 style: TextStyle(
-                                  color: Color(0xFF26332A),
+                                  color: deepForest,
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -201,23 +225,19 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                               ElevatedButton.icon(
                                 onPressed: _showAddSupplierDialog,
-
                                 icon: const Icon(Icons.add, size: 18),
-
                                 label: const Text('Add Supplier'),
-
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2E7D32),
+                                  backgroundColor: deepForest,
                                   foregroundColor: Colors.white,
                                   elevation: 0,
-
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 14,
                                     vertical: 12,
                                   ),
-
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
+                                    side: const BorderSide(color: gold),
                                   ),
                                 ),
                               ),
@@ -226,52 +246,62 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                           const SizedBox(height: 14),
 
+                          // ========================================
                           // SEARCH
+                          // ========================================
                           TextField(
                             controller: searchController,
-
                             onChanged: (_) {
                               setState(() {});
                             },
-
                             decoration: InputDecoration(
                               hintText: 'Search suppliers',
+                              hintStyle: const TextStyle(color: mutedText),
 
                               prefixIcon: const Icon(
                                 Icons.search,
-                                color: Color(0xFF2E7D32),
+                                color: olive,
                               ),
 
                               suffixIcon: searchController.text.isNotEmpty
                                   ? IconButton(
                                       onPressed: () {
                                         searchController.clear();
-
                                         setState(() {});
                                       },
-                                      icon: const Icon(Icons.clear),
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: mutedText,
+                                      ),
                                     )
                                   : null,
 
                               filled: true,
                               fillColor: Colors.white,
 
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide.none,
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
+                                ),
                               ),
 
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade200,
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
                                 ),
                               ),
 
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFF2E7D32),
+                                  color: gold,
                                   width: 1.5,
                                 ),
                               ),
@@ -280,7 +310,9 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                           const SizedBox(height: 18),
 
+                          // ========================================
                           // SUPPLIER LIST
+                          // ========================================
                           if (filteredSuppliers.isEmpty)
                             _buildEmptyState()
                           else
@@ -302,36 +334,33 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
   Widget _buildSummaryCard() {
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.all(20),
-
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+          colors: [deepForest, mainGreen],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
-
         borderRadius: BorderRadius.circular(20),
-
+        border: Border.all(color: gold, width: 1),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.18),
+            color: deepForest.withValues(alpha: 0.18),
             blurRadius: 16,
             offset: const Offset(0, 7),
           ),
         ],
       ),
-
       child: Row(
         children: [
           Container(
             width: 50,
             height: 50,
-
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: gold.withValues(alpha: 0.15),
               shape: BoxShape.circle,
+              border: Border.all(color: gold.withValues(alpha: 0.45)),
             ),
-
             child: const Icon(
               Icons.storefront_outlined,
               color: Colors.white,
@@ -344,7 +373,6 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-
               children: [
                 const Text(
                   'Supplier Payments',
@@ -355,7 +383,6 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                 Text(
                   '₹${totalPayable.toStringAsFixed(0)}',
-
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 25,
@@ -396,56 +423,57 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
       onTap: () {
         _showSupplierDetails(supplier);
       },
-
       borderRadius: BorderRadius.circular(17),
-
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
-
         padding: const EdgeInsets.all(16),
-
         decoration: BoxDecoration(
           color: Colors.white,
-
           borderRadius: BorderRadius.circular(17),
-
-          border: Border.all(color: Colors.grey.shade100),
+          border: Border.all(color: borderGreen),
+          boxShadow: [
+            BoxShadow(
+              color: deepForest.withValues(alpha: 0.035),
+              blurRadius: 7,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
-
         child: Row(
           children: [
+            // ======================================================
             // ICON
+            // ======================================================
+
             Container(
               width: 48,
               height: 48,
-
               decoration: const BoxDecoration(
                 color: Color(0xFFFFF8E1),
                 shape: BoxShape.circle,
               ),
-
               child: const Icon(
                 Icons.storefront_outlined,
-                color: Color(0xFFAD6800),
+                color: gold,
                 size: 25,
               ),
             ),
 
             const SizedBox(width: 13),
 
+            // ======================================================
             // DETAILS
+            // ======================================================
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
                   Text(
                     name,
-
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF26332A),
+                      color: deepForest,
                     ),
                   ),
 
@@ -453,10 +481,10 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.category_outlined,
                         size: 13,
-                        color: Colors.grey.shade500,
+                        color: mutedText,
                       ),
 
                       const SizedBox(width: 4),
@@ -465,10 +493,9 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                         child: Text(
                           category,
                           overflow: TextOverflow.ellipsis,
-
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
-                            color: Colors.grey.shade600,
+                            color: mutedText,
                           ),
                         ),
                       ),
@@ -479,10 +506,10 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.phone_outlined,
                         size: 13,
-                        color: Colors.grey.shade500,
+                        color: mutedText,
                       ),
 
                       const SizedBox(width: 4),
@@ -491,10 +518,9 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                         child: Text(
                           phone,
                           overflow: TextOverflow.ellipsis,
-
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
-                            color: Colors.grey.shade600,
+                            color: mutedText,
                           ),
                         ),
                       ),
@@ -506,19 +532,16 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
             const SizedBox(width: 10),
 
+            // ======================================================
             // PAYABLE
+            // ======================================================
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
-
               children: [
                 Text(
                   hasPendingPayment ? '₹${payable.toStringAsFixed(0)}' : 'Paid',
-
                   style: TextStyle(
-                    color: hasPendingPayment
-                        ? const Color(0xFFE65100)
-                        : const Color(0xFF2E7D32),
-
+                    color: hasPendingPayment ? gold : mainGreen,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
@@ -528,15 +551,14 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                 Text(
                   hasPendingPayment ? 'To pay' : 'No pending',
-
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 10),
+                  style: const TextStyle(color: mutedText, fontSize: 10),
                 ),
               ],
             ),
 
             const SizedBox(width: 8),
 
-            const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
+            const Icon(Icons.chevron_right, color: mutedText, size: 20),
           ],
         ),
       ),
@@ -573,9 +595,9 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
     showDialog(
       context: context,
-
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -585,16 +607,11 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
               Container(
                 width: 42,
                 height: 42,
-
                 decoration: const BoxDecoration(
                   color: Color(0xFFFFF8E1),
                   shape: BoxShape.circle,
                 ),
-
-                child: const Icon(
-                  Icons.storefront_outlined,
-                  color: Color(0xFFAD6800),
-                ),
+                child: const Icon(Icons.storefront_outlined, color: gold),
               ),
 
               const SizedBox(width: 12),
@@ -602,9 +619,8 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
               const Expanded(
                 child: Text(
                   'Supplier Details',
-
                   style: TextStyle(
-                    color: Color(0xFF1B5E20),
+                    color: deepForest,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -615,106 +631,55 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-
               children: [
-                // SUPPLIER NAME
-                TextField(
+                _buildDialogTextField(
                   controller: nameController,
-
-                  textCapitalization: TextCapitalization.words,
-
-                  decoration: InputDecoration(
-                    labelText: 'Supplier Name',
-
-                    prefixIcon: const Icon(
-                      Icons.storefront_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  label: 'Supplier Name',
+                  icon: Icons.storefront_outlined,
+                  capitalization: TextCapitalization.words,
                 ),
 
                 const SizedBox(height: 14),
 
-                // PHONE
-                TextField(
+                _buildDialogTextField(
                   controller: phoneController,
-
+                  label: 'Phone Number',
+                  icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
-
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-
-                    prefixIcon: const Icon(
-                      Icons.phone_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
 
                 const SizedBox(height: 14),
 
-                // CATEGORY
-                TextField(
+                _buildDialogTextField(
                   controller: categoryController,
-
-                  textCapitalization: TextCapitalization.words,
-
-                  decoration: InputDecoration(
-                    labelText: 'Supply Category',
-
-                    prefixIcon: const Icon(
-                      Icons.category_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  label: 'Supply Category',
+                  icon: Icons.category_outlined,
+                  capitalization: TextCapitalization.words,
                 ),
 
                 const SizedBox(height: 14),
 
-                // AMOUNT TO PAY
-                TextField(
+                _buildDialogTextField(
                   controller: payableController,
-
+                  label: 'Amount to Pay',
+                  icon: Icons.currency_rupee,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-
-                  decoration: InputDecoration(
-                    labelText: 'Amount to Pay',
-
-                    prefixIcon: const Icon(
-                      Icons.currency_rupee,
-                      color: Color(0xFFAD6800),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  prefixText: '₹ ',
                 ),
               ],
             ),
           ),
 
           actions: [
+            // ======================================================
             // DELETE
+            // ======================================================
+
             TextButton(
               onPressed: () async {
                 final navigator = Navigator.of(dialogContext);
-
-                final messenger = ScaffoldMessenger.of(context);
 
                 try {
                   await DatabaseHelper.instance.deleteSupplier(supplierId);
@@ -727,43 +692,29 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                   if (!mounted) return;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Supplier deleted successfully.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFFC62828),
-                    ),
-                  );
+                  _showMessage('Supplier deleted successfully.');
                 } catch (e) {
                   if (!mounted) return;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to delete supplier.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFFC62828),
-                    ),
-                  );
+                  _showMessage('Failed to delete supplier.');
                 }
               },
-
-              child: const Text(
-                'Delete',
-
-                style: TextStyle(color: Color(0xFFC62828)),
-              ),
+              child: const Text('Delete', style: TextStyle(color: errorRed)),
             ),
 
+            // ======================================================
             // CANCEL
+            // ======================================================
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
               },
-
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
 
+            // ======================================================
             // SAVE
+            // ======================================================
             ElevatedButton(
               onPressed: () async {
                 final name = nameController.text.trim();
@@ -777,29 +728,22 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                 );
 
                 if (name.isEmpty) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter supplier name.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter supplier name.',
                   );
-
                   return;
                 }
 
-                // Only ONE payable validation.
                 if (payable == null || payable < 0) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid payable amount.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter a valid payable amount.',
                   );
-
                   return;
                 }
 
                 final navigator = Navigator.of(dialogContext);
-
-                final messenger = ScaffoldMessenger.of(context);
 
                 try {
                   await DatabaseHelper.instance.updateSupplier(supplierId, {
@@ -817,38 +761,22 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                   if (!mounted) return;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Supplier updated successfully 🌱'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF2E7D32),
-                    ),
-                  );
+                  _showMessage('Supplier updated successfully 🌱');
                 } catch (e) {
                   if (!mounted) return;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to update supplier.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFFC62828),
-                    ),
-                  );
+                  _showMessage('Failed to update supplier.');
                 }
               },
-
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2E7D32),
-
+                backgroundColor: deepForest,
                 foregroundColor: Colors.white,
-
                 elevation: 0,
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: gold),
                 ),
               ),
-
               child: const Text('Save'),
             ),
           ],
@@ -871,34 +799,24 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
     return Container(
       width: double.infinity,
-
       padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 20),
-
       decoration: BoxDecoration(
         color: Colors.white,
-
         borderRadius: BorderRadius.circular(18),
-
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
       ),
-
       child: Column(
         children: [
-          Icon(
-            Icons.storefront_outlined,
-            size: 55,
-            color: Colors.grey.shade400,
-          ),
+          const Icon(Icons.storefront_outlined, size: 55, color: olive),
 
           const SizedBox(height: 14),
 
           Text(
             hasSuppliers ? 'No suppliers found' : 'No suppliers yet',
-
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF26332A),
+              color: deepForest,
             ),
           ),
 
@@ -908,10 +826,8 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
             hasSuppliers
                 ? 'Try a different search.'
                 : 'Add your first supplier to get started.',
-
             textAlign: TextAlign.center,
-
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            style: const TextStyle(fontSize: 12, color: mutedText),
           ),
         ],
       ),
@@ -933,129 +849,78 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
     showDialog(
       context: context,
-
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
 
           title: const Text(
             'Add Supplier',
-
-            style: TextStyle(
-              color: Color(0xFF1B5E20),
-              fontWeight: FontWeight.bold,
-            ),
+            style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
           ),
 
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-
               children: [
-                // NAME
-                TextField(
+                _buildDialogTextField(
                   controller: nameController,
-
-                  textCapitalization: TextCapitalization.words,
-
-                  decoration: InputDecoration(
-                    labelText: 'Supplier Name',
-
-                    prefixIcon: const Icon(
-                      Icons.storefront_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  label: 'Supplier Name',
+                  icon: Icons.storefront_outlined,
+                  capitalization: TextCapitalization.words,
                 ),
 
                 const SizedBox(height: 14),
 
-                // PHONE
-                TextField(
+                _buildDialogTextField(
                   controller: phoneController,
-
+                  label: 'Phone Number',
+                  icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
-
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-
-                    prefixIcon: const Icon(
-                      Icons.phone_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
                 ),
 
                 const SizedBox(height: 14),
 
-                // CATEGORY
-                TextField(
+                _buildDialogTextField(
                   controller: categoryController,
-
-                  textCapitalization: TextCapitalization.words,
-
-                  decoration: InputDecoration(
-                    labelText: 'Supply Category',
-
-                    prefixIcon: const Icon(
-                      Icons.category_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  label: 'Supply Category',
+                  icon: Icons.category_outlined,
+                  capitalization: TextCapitalization.words,
                 ),
 
                 const SizedBox(height: 14),
 
-                // AMOUNT TO PAY
-                TextField(
+                _buildDialogTextField(
                   controller: payableController,
-
+                  label: 'Amount to Pay',
+                  hint: 'Enter payable amount',
+                  icon: Icons.currency_rupee,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-
-                  decoration: InputDecoration(
-                    labelText: 'Amount to Pay',
-
-                    prefixIcon: const Icon(
-                      Icons.currency_rupee,
-                      color: Color(0xFFAD6800),
-                    ),
-
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
+                  prefixText: '₹ ',
                 ),
               ],
             ),
           ),
 
           actions: [
+            // ======================================================
             // CANCEL
+            // ======================================================
+
             TextButton(
               onPressed: () {
                 Navigator.pop(dialogContext);
               },
-
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
 
+            // ======================================================
             // ADD
+            // ======================================================
             ElevatedButton(
               onPressed: () async {
                 final name = nameController.text.trim();
@@ -1069,37 +934,28 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
                 );
 
                 if (name.isEmpty) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter supplier name.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter supplier name.',
                   );
-
                   return;
                 }
 
                 if (payable == null || payable < 0) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid payable amount.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter a valid payable amount.',
                   );
-
                   return;
                 }
 
                 final navigator = Navigator.of(dialogContext);
 
-                final messenger = ScaffoldMessenger.of(context);
-
                 try {
                   await DatabaseHelper.instance.insertSupplier({
                     'name': name,
-
                     'phone': phone.isEmpty ? 'Not provided' : phone,
-
                     'category': category.isEmpty ? 'Other' : category,
-
                     'payable': payable,
                   });
 
@@ -1111,40 +967,24 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
 
                   if (!mounted) return;
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Supplier added successfully 🌱'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF2E7D32),
-                    ),
-                  );
+                  _showMessage('Supplier added successfully 🌱');
                 } catch (e) {
                   if (!mounted) return;
 
                   navigator.pop();
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to add supplier.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFFC62828),
-                    ),
-                  );
+                  _showMessage('Failed to add supplier.');
                 }
               },
-
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2E7D32),
-
+                backgroundColor: deepForest,
                 foregroundColor: Colors.white,
-
                 elevation: 0,
-
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: gold),
                 ),
               ),
-
               child: const Text('Add'),
             ),
           ],
@@ -1156,5 +996,65 @@ class _SuppliersScreenState extends State<SuppliersScreen> {
       categoryController.dispose();
       payableController.dispose();
     });
+  }
+
+  // ============================================================
+  // DIALOG TEXT FIELD
+  // ============================================================
+
+  Widget _buildDialogTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    String? hint,
+    TextInputType? keyboardType,
+    TextCapitalization capitalization = TextCapitalization.none,
+    String? prefixText,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      textCapitalization: capitalization,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        prefixText: prefixText,
+
+        prefixIcon: Icon(icon, color: mainGreen),
+
+        filled: true,
+        fillColor: Colors.white,
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderGreen),
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderGreen),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: gold, width: 1.5),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // DIALOG MESSAGE
+  // ============================================================
+
+  void _showDialogMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      ),
+    );
   }
 }

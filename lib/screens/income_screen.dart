@@ -10,8 +10,26 @@ class IncomeScreen extends StatefulWidget {
 }
 
 class _IncomeScreenState extends State<IncomeScreen> {
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+
+  // ============================================================
+  // CONTROLLERS
+  // ============================================================
+
   final TextEditingController amountController = TextEditingController();
+
   final TextEditingController customerController = TextEditingController();
+
   final TextEditingController notesController = TextEditingController();
 
   String selectedCategory = 'Plant Sales';
@@ -35,6 +53,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
     'Other',
   ];
 
+  // ============================================================
+  // DISPOSE
+  // ============================================================
+
   @override
   void dispose() {
     amountController.dispose();
@@ -42,6 +64,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
     notesController.dispose();
     super.dispose();
   }
+
+  // ============================================================
+  // DATE PICKER
+  // ============================================================
 
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
@@ -52,7 +78,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(primary: Color(0xFF2E7D32)),
+            colorScheme: const ColorScheme.light(
+              primary: mainGreen,
+              onPrimary: Colors.white,
+              surface: softCream,
+              onSurface: deepForest,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: softCream),
           ),
           child: child!,
         );
@@ -65,6 +97,10 @@ class _IncomeScreenState extends State<IncomeScreen> {
       });
     }
   }
+
+  // ============================================================
+  // SAVE INCOME
+  // ============================================================
 
   Future<void> _saveIncome() async {
     final amount = amountController.text.trim();
@@ -97,17 +133,24 @@ class _IncomeScreenState extends State<IncomeScreen> {
       _showSuccessDialog(parsedAmount);
     } catch (e) {
       if (!mounted) return;
+
       _showMessage('Failed to save income.');
     }
   }
+
+  // ============================================================
+  // SUCCESS DIALOG
+  // ============================================================
 
   void _showSuccessDialog(double amount) {
     showDialog(
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: gold.withValues(alpha: 0.45), width: 1),
           ),
           contentPadding: const EdgeInsets.fromLTRB(24, 28, 24, 22),
           content: Column(
@@ -116,36 +159,46 @@ class _IncomeScreenState extends State<IncomeScreen> {
               Container(
                 width: 70,
                 height: 70,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE8F5E9),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE7EFE5),
                   shape: BoxShape.circle,
+                  border: Border.all(
+                    color: gold.withValues(alpha: 0.45),
+                    width: 1,
+                  ),
                 ),
                 child: const Icon(
                   Icons.check_circle_outline,
                   size: 44,
-                  color: Color(0xFF2E7D32),
+                  color: mainGreen,
                 ),
               ),
+
               const SizedBox(height: 18),
+
               const Text(
                 'Income Added',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20),
+                  color: deepForest,
                 ),
               ),
+
               const SizedBox(height: 10),
+
               Text(
                 '₹${amount.toStringAsFixed(2)} has been recorded as income.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade600,
+                  color: mutedText,
                   height: 1.4,
                 ),
               ),
+
               const SizedBox(height: 22),
+
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -155,11 +208,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2E7D32),
+                    backgroundColor: deepForest,
                     foregroundColor: Colors.white,
-                    elevation: 0,
+                    elevation: 2,
+                    shadowColor: gold.withValues(alpha: 0.30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: gold, width: 1),
                     ),
                   ),
                   child: const Text(
@@ -175,15 +230,25 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
+  // ============================================================
+  // MESSAGE
+  // ============================================================
+
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
+
+  // ============================================================
+  // INPUT DECORATION
+  // ============================================================
 
   InputDecoration _inputDecoration({
     required String hint,
@@ -191,34 +256,44 @@ class _IncomeScreenState extends State<IncomeScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      prefixIcon: Icon(icon, color: const Color(0xFF4CAF50)),
+      hintStyle: const TextStyle(color: mutedText, fontSize: 15),
+      prefixIcon: Icon(icon, color: mainGreen),
       filled: true,
       fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: borderGreen),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderSide: const BorderSide(color: borderGreen),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFF4CAF50), width: 1.5),
+        borderSide: const BorderSide(color: gold, width: 2),
       ),
     );
   }
 
+  // ============================================================
+  // LABEL
+  // ============================================================
+
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Colors.grey.shade800,
+        color: deepForest,
       ),
     );
   }
+
+  // ============================================================
+  // DROPDOWN
+  // ============================================================
 
   Widget _buildDropdown<T>({
     required T value,
@@ -228,59 +303,103 @@ class _IncomeScreenState extends State<IncomeScreen> {
     return DropdownButtonFormField<T>(
       initialValue: value,
       isExpanded: true,
+      dropdownColor: softCream,
+      icon: const Icon(Icons.keyboard_arrow_down_rounded, color: mainGreen),
       decoration: _inputDecoration(hint: '', icon: Icons.category_outlined),
       items: items.map((item) {
-        return DropdownMenuItem<T>(value: item, child: Text(item.toString()));
+        return DropdownMenuItem<T>(
+          value: item,
+          child: Text(
+            item.toString(),
+            style: const TextStyle(color: deepForest, fontSize: 14),
+          ),
+        );
       }).toList(),
       onChanged: onChanged,
     );
   }
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
+
+      // ==========================================================
+      // APP BAR
+      // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
+
         title: const Text(
           'Add Income',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
       ),
+
+      // ==========================================================
+      // BODY
+      // ==========================================================
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
           child: Center(
             child: ConstrainedBox(
-              // Same mobile width as Login, Create Account and Dashboard.
               constraints: const BoxConstraints(maxWidth: 390),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // ==================================================
+                  // HEADER CARD
+                  // ==================================================
+
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFE8F5E9),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFE8EFE5), Color(0xFFF1F2DF)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: gold.withValues(alpha: 0.35),
+                        width: 1,
+                      ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.trending_up,
-                          size: 34,
-                          color: Color(0xFF2E7D32),
+                        Container(
+                          width: 52,
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: softCream,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: gold.withValues(alpha: 0.45),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.trending_up,
+                            size: 30,
+                            color: mainGreen,
+                          ),
                         ),
-                        SizedBox(width: 14),
-                        Expanded(
+
+                        const SizedBox(width: 14),
+
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -289,15 +408,17 @@ class _IncomeScreenState extends State<IncomeScreen> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFF1B5E20),
+                                  color: deepForest,
                                 ),
                               ),
+
                               SizedBox(height: 4),
+
                               Text(
                                 'Add money received by Vijaya Garden.',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Color(0xFF6B756B),
+                                  color: mutedText,
                                 ),
                               ),
                             ],
@@ -309,8 +430,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 26),
 
+                  // ==================================================
+                  // AMOUNT
+                  // ==================================================
                   _buildLabel('Amount'),
+
                   const SizedBox(height: 8),
+
                   TextField(
                     controller: amountController,
                     keyboardType: const TextInputType.numberWithOptions(
@@ -324,8 +450,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
+                  // ==================================================
+                  // CATEGORY
+                  // ==================================================
                   _buildLabel('Income Category'),
+
                   const SizedBox(height: 8),
+
                   _buildDropdown<String>(
                     value: selectedCategory,
                     items: categories,
@@ -340,8 +471,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
+                  // ==================================================
+                  // CUSTOMER
+                  // ==================================================
                   _buildLabel('Customer Name (Optional)'),
+
                   const SizedBox(height: 8),
+
                   TextField(
                     controller: customerController,
                     textCapitalization: TextCapitalization.words,
@@ -353,8 +489,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
+                  // ==================================================
+                  // DATE
+                  // ==================================================
                   _buildLabel('Date'),
+
                   const SizedBox(height: 8),
+
                   InkWell(
                     onTap: _selectDate,
                     borderRadius: BorderRadius.circular(14),
@@ -367,21 +508,28 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         '${selectedDate.day.toString().padLeft(2, '0')}/'
                         '${selectedDate.month.toString().padLeft(2, '0')}/'
                         '${selectedDate.year}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF26332A),
-                        ),
+                        style: const TextStyle(fontSize: 14, color: deepForest),
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
+                  // ==================================================
+                  // PAYMENT METHOD
+                  // ==================================================
                   _buildLabel('Payment Method'),
+
                   const SizedBox(height: 8),
+
                   DropdownButtonFormField<String>(
                     initialValue: selectedPaymentMethod,
                     isExpanded: true,
+                    dropdownColor: softCream,
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: mainGreen,
+                    ),
                     decoration: _inputDecoration(
                       hint: '',
                       icon: Icons.payment_outlined,
@@ -389,7 +537,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                     items: paymentMethods.map((method) {
                       return DropdownMenuItem<String>(
                         value: method,
-                        child: Text(method),
+                        child: Text(
+                          method,
+                          style: const TextStyle(
+                            color: deepForest,
+                            fontSize: 14,
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -403,8 +557,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
+                  // ==================================================
+                  // NOTES
+                  // ==================================================
                   _buildLabel('Notes (Optional)'),
+
                   const SizedBox(height: 8),
+
                   TextField(
                     controller: notesController,
                     maxLines: 4,
@@ -417,6 +576,9 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 30),
 
+                  // ==================================================
+                  // SAVE BUTTON
+                  // ==================================================
                   SizedBox(
                     width: double.infinity,
                     height: 54,
@@ -431,11 +593,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2E7D32),
+                        backgroundColor: deepForest,
                         foregroundColor: Colors.white,
-                        elevation: 0,
+                        elevation: 2,
+                        shadowColor: gold.withValues(alpha: 0.35),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
+                          side: const BorderSide(color: gold, width: 1),
                         ),
                       ),
                     ),

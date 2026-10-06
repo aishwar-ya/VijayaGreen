@@ -10,8 +10,26 @@ class ExpenseScreen extends StatefulWidget {
 }
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
+  // ============================================================
+  // CONTROLLERS
+  // ============================================================
+
   final TextEditingController amountController = TextEditingController();
+
   final TextEditingController supplierController = TextEditingController();
+
   final TextEditingController notesController = TextEditingController();
 
   String selectedCategory = 'Fertilizer';
@@ -39,6 +57,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
     'Other',
   ];
 
+  // ============================================================
+  // DISPOSE
+  // ============================================================
+
   @override
   void dispose() {
     amountController.dispose();
@@ -60,7 +82,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme: const ColorScheme.light(primary: Color(0xFFC62828)),
+            colorScheme: const ColorScheme.light(
+              primary: errorRed,
+              onPrimary: Colors.white,
+              surface: softCream,
+              onSurface: deepForest,
+            ),
+            dialogTheme: const DialogThemeData(backgroundColor: softCream),
           ),
           child: child!,
         );
@@ -123,8 +151,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       context: context,
       builder: (dialogContext) {
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
+            side: BorderSide(color: gold.withValues(alpha: 0.45), width: 1),
           ),
           contentPadding: const EdgeInsets.fromLTRB(24, 28, 24, 22),
           content: Column(
@@ -133,36 +163,46 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               Container(
                 width: 70,
                 height: 70,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFFFEBEE),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFEBEE),
                   shape: BoxShape.circle,
+                  border: Border.all(
+                    color: gold.withValues(alpha: 0.35),
+                    width: 1,
+                  ),
                 ),
                 child: const Icon(
                   Icons.check_circle_outline,
                   size: 44,
-                  color: Color(0xFFC62828),
+                  color: errorRed,
                 ),
               ),
+
               const SizedBox(height: 18),
+
               const Text(
                 'Expense Added',
                 style: TextStyle(
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFFB71C1C),
+                  color: deepForest,
                 ),
               ),
+
               const SizedBox(height: 10),
+
               Text(
                 '₹${amount.toStringAsFixed(2)} has been recorded as an expense.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.grey.shade600,
+                  color: mutedText,
                   height: 1.4,
                 ),
               ),
+
               const SizedBox(height: 22),
+
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -172,11 +212,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     Navigator.pop(context);
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFC62828),
+                    backgroundColor: deepForest,
                     foregroundColor: Colors.white,
-                    elevation: 0,
+                    elevation: 2,
+                    shadowColor: gold.withValues(alpha: 0.30),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
+                      side: const BorderSide(color: gold, width: 1),
                     ),
                   ),
                   child: const Text(
@@ -201,7 +243,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -216,20 +260,22 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      prefixIcon: Icon(icon, color: const Color(0xFFC62828)),
+      hintStyle: const TextStyle(color: mutedText, fontSize: 15),
+      prefixIcon: Icon(icon, color: errorRed),
       filled: true,
       fillColor: Colors.white,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide.none,
+        borderSide: const BorderSide(color: borderGreen),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: BorderSide(color: Colors.grey.shade200),
+        borderSide: const BorderSide(color: borderGreen),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFFE53935), width: 1.5),
+        borderSide: const BorderSide(color: errorRed, width: 2),
       ),
     );
   }
@@ -241,10 +287,10 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   Widget _buildLabel(String text) {
     return Text(
       text,
-      style: TextStyle(
+      style: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Colors.grey.shade800,
+        color: deepForest,
       ),
     );
   }
@@ -256,26 +302,26 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
       // ==========================================================
       // APP BAR
       // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
+
         title: const Text(
           'Add Expense',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
       ),
 
@@ -291,26 +337,47 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // =================================================
-                  // HEADER
-                  // =================================================
+                  // ==================================================
+                  // HEADER CARD
+                  // ==================================================
 
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFEBEE),
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFFF7E8E8), Color(0xFFF4EEE0)],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(18),
+                      border: Border.all(
+                        color: gold.withValues(alpha: 0.35),
+                        width: 1,
+                      ),
                     ),
-                    child: const Row(
+                    child: Row(
                       children: [
-                        Icon(
-                          Icons.trending_down,
-                          size: 34,
-                          color: Color(0xFFC62828),
+                        Container(
+                          width: 52,
+                          height: 52,
+                          decoration: BoxDecoration(
+                            color: softCream,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: gold.withValues(alpha: 0.45),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.trending_down,
+                            size: 30,
+                            color: errorRed,
+                          ),
                         ),
-                        SizedBox(width: 14),
-                        Expanded(
+
+                        const SizedBox(width: 14),
+
+                        const Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -319,15 +386,17 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xFFB71C1C),
+                                  color: deepForest,
                                 ),
                               ),
+
                               SizedBox(height: 4),
+
                               Text(
                                 'Add money spent by Vijaya Garden.',
                                 style: TextStyle(
                                   fontSize: 12,
-                                  color: Color(0xFF6B756B),
+                                  color: mutedText,
                                 ),
                               ),
                             ],
@@ -339,9 +408,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 26),
 
-                  // =================================================
+                  // ==================================================
                   // AMOUNT
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Amount'),
 
                   const SizedBox(height: 8),
@@ -359,9 +428,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 20),
 
-                  // =================================================
+                  // ==================================================
                   // CATEGORY
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Expense Category'),
 
                   const SizedBox(height: 8),
@@ -369,6 +438,11 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   DropdownButtonFormField<String>(
                     initialValue: selectedCategory,
                     isExpanded: true,
+                    dropdownColor: softCream,
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: errorRed,
+                    ),
                     decoration: _inputDecoration(
                       hint: '',
                       icon: Icons.category_outlined,
@@ -376,7 +450,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     items: categories.map((category) {
                       return DropdownMenuItem<String>(
                         value: category,
-                        child: Text(category),
+                        child: Text(
+                          category,
+                          style: const TextStyle(
+                            color: deepForest,
+                            fontSize: 14,
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -390,9 +470,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 20),
 
-                  // =================================================
+                  // ==================================================
                   // SUPPLIER
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Supplier Name (Optional)'),
 
                   const SizedBox(height: 8),
@@ -408,9 +488,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 20),
 
-                  // =================================================
+                  // ==================================================
                   // DATE
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Date'),
 
                   const SizedBox(height: 8),
@@ -427,19 +507,16 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         '${selectedDate.day.toString().padLeft(2, '0')}/'
                         '${selectedDate.month.toString().padLeft(2, '0')}/'
                         '${selectedDate.year}',
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF26332A),
-                        ),
+                        style: const TextStyle(fontSize: 14, color: deepForest),
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
-                  // =================================================
+                  // ==================================================
                   // PAYMENT METHOD
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Payment Method'),
 
                   const SizedBox(height: 8),
@@ -447,6 +524,11 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   DropdownButtonFormField<String>(
                     initialValue: selectedPaymentMethod,
                     isExpanded: true,
+                    dropdownColor: softCream,
+                    icon: const Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: errorRed,
+                    ),
                     decoration: _inputDecoration(
                       hint: '',
                       icon: Icons.payment_outlined,
@@ -454,7 +536,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                     items: paymentMethods.map((method) {
                       return DropdownMenuItem<String>(
                         value: method,
-                        child: Text(method),
+                        child: Text(
+                          method,
+                          style: const TextStyle(
+                            color: deepForest,
+                            fontSize: 14,
+                          ),
+                        ),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -468,9 +556,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 20),
 
-                  // =================================================
+                  // ==================================================
                   // NOTES
-                  // =================================================
+                  // ==================================================
                   _buildLabel('Notes (Optional)'),
 
                   const SizedBox(height: 8),
@@ -487,9 +575,9 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
 
                   const SizedBox(height: 30),
 
-                  // =================================================
+                  // ==================================================
                   // SAVE BUTTON
-                  // =================================================
+                  // ==================================================
                   SizedBox(
                     width: double.infinity,
                     height: 54,
@@ -504,11 +592,13 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFC62828),
+                        backgroundColor: deepForest,
                         foregroundColor: Colors.white,
-                        elevation: 0,
+                        elevation: 2,
+                        shadowColor: gold.withValues(alpha: 0.35),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
+                          side: const BorderSide(color: gold, width: 1),
                         ),
                       ),
                     ),

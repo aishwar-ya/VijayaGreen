@@ -10,6 +10,23 @@ class LedgerScreen extends StatefulWidget {
 }
 
 class _LedgerScreenState extends State<LedgerScreen> {
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
+  // ============================================================
+  // STATE
+  // ============================================================
+
   final TextEditingController searchController = TextEditingController();
 
   String selectedFilter = 'All';
@@ -19,7 +36,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
   bool isLoading = true;
 
   // ============================================================
-  // LOAD TRANSACTIONS FROM SQLITE
+  // INIT
   // ============================================================
 
   @override
@@ -27,6 +44,20 @@ class _LedgerScreenState extends State<LedgerScreen> {
     super.initState();
     _loadTransactions();
   }
+
+  // ============================================================
+  // DISPOSE
+  // ============================================================
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  // ============================================================
+  // LOAD TRANSACTIONS FROM SQLITE
+  // ============================================================
 
   Future<void> _loadTransactions() async {
     try {
@@ -159,7 +190,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
   // ============================================================
 
   List<Map<String, dynamic>> get filteredTransactions {
-    final searchText = searchController.text.trim().toLowerCase();
+    final String searchText = searchController.text.trim().toLowerCase();
 
     return transactions.where((transaction) {
       final bool matchesFilter =
@@ -196,7 +227,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -208,25 +241,25 @@ class _LedgerScreenState extends State<LedgerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
       // ==========================================================
       // APP BAR
       // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+
         title: const Text(
           'Ledger',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
+
         actions: [
           IconButton(
             onPressed: _refreshTransactions,
-            icon: const Icon(Icons.refresh, color: Color(0xFF1B5E20)),
+            icon: const Icon(Icons.refresh, color: deepForest),
             tooltip: 'Refresh',
           ),
         ],
@@ -237,32 +270,31 @@ class _LedgerScreenState extends State<LedgerScreen> {
       // ==========================================================
       body: SafeArea(
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
-              )
+            ? const Center(child: CircularProgressIndicator(color: gold))
             : RefreshIndicator(
-                color: const Color(0xFF2E7D32),
+                color: gold,
+                backgroundColor: softCream,
                 onRefresh: _refreshTransactions,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
                   padding: const EdgeInsets.fromLTRB(20, 8, 20, 30),
                   child: Center(
                     child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 900),
+                      constraints: const BoxConstraints(maxWidth: 390),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // =================================================
+                          // ========================================
                           // BALANCE CARD
-                          // =================================================
+                          // ========================================
 
                           _buildBalanceCard(),
 
                           const SizedBox(height: 18),
 
-                          // =================================================
+                          // ========================================
                           // SUMMARY CARDS
-                          // =================================================
+                          // ========================================
                           Row(
                             children: [
                               Expanded(
@@ -270,8 +302,8 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                   title: 'Income',
                                   amount: totalIncome,
                                   icon: Icons.arrow_downward,
-                                  color: const Color(0xFF2E7D32),
-                                  backgroundColor: const Color(0xFFE8F5E9),
+                                  color: mainGreen,
+                                  backgroundColor: const Color(0xFFE8F0E8),
                                 ),
                               ),
                               const SizedBox(width: 12),
@@ -280,7 +312,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                                   title: 'Expenses',
                                   amount: totalExpenses,
                                   icon: Icons.arrow_upward,
-                                  color: const Color(0xFFC62828),
+                                  color: errorRed,
                                   backgroundColor: const Color(0xFFFFEBEE),
                                 ),
                               ),
@@ -289,13 +321,13 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
                           const SizedBox(height: 28),
 
-                          // =================================================
+                          // ========================================
                           // TRANSACTIONS TITLE
-                          // =================================================
+                          // ========================================
                           const Text(
                             'Transactions',
                             style: TextStyle(
-                              color: Color(0xFF26332A),
+                              color: deepForest,
                               fontSize: 19,
                               fontWeight: FontWeight.bold,
                             ),
@@ -303,9 +335,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
                           const SizedBox(height: 14),
 
-                          // =================================================
+                          // ========================================
                           // SEARCH
-                          // =================================================
+                          // ========================================
                           TextField(
                             controller: searchController,
                             onChanged: (_) {
@@ -313,35 +345,52 @@ class _LedgerScreenState extends State<LedgerScreen> {
                             },
                             decoration: InputDecoration(
                               hintText: 'Search transactions',
+                              hintStyle: const TextStyle(color: mutedText),
+
                               prefixIcon: const Icon(
                                 Icons.search,
-                                color: Color(0xFF2E7D32),
+                                color: olive,
                               ),
+
                               suffixIcon: searchController.text.isNotEmpty
                                   ? IconButton(
                                       onPressed: () {
                                         searchController.clear();
                                         setState(() {});
                                       },
-                                      icon: const Icon(Icons.clear),
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: mutedText,
+                                      ),
                                     )
                                   : null,
+
                               filled: true,
                               fillColor: Colors.white,
+
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
+
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide.none,
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade200,
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
                                 ),
                               ),
+
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(14),
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
+                                ),
+                              ),
+
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFF2E7D32),
+                                  color: gold,
                                   width: 1.5,
                                 ),
                               ),
@@ -350,9 +399,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
                           const SizedBox(height: 14),
 
-                          // =================================================
+                          // ========================================
                           // FILTERS
-                          // =================================================
+                          // ========================================
                           SingleChildScrollView(
                             scrollDirection: Axis.horizontal,
                             child: Row(
@@ -368,9 +417,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
 
                           const SizedBox(height: 18),
 
-                          // =================================================
+                          // ========================================
                           // TRANSACTIONS
-                          // =================================================
+                          // ========================================
                           if (filteredTransactions.isEmpty)
                             _buildEmptyState()
                           else
@@ -389,6 +438,12 @@ class _LedgerScreenState extends State<LedgerScreen> {
   }
 
   // ============================================================
+  // MAIN GREEN
+  // ============================================================
+
+  static const Color mainGreen = Color(0xFF24543A);
+
+  // ============================================================
   // BALANCE CARD
   // ============================================================
 
@@ -398,12 +453,15 @@ class _LedgerScreenState extends State<LedgerScreen> {
       padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+          colors: [deepForest, Color(0xFF24543A)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: gold, width: 1),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.20),
+            color: deepForest.withValues(alpha: 0.18),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),
@@ -412,12 +470,37 @@ class _LedgerScreenState extends State<LedgerScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Current Balance',
-            style: TextStyle(color: Colors.white70, fontSize: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                'Current Balance',
+                style: TextStyle(color: Colors.white70, fontSize: 14),
+              ),
+
+              Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 7,
+                ),
+                decoration: BoxDecoration(
+                  color: gold.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: gold, width: 1),
+                ),
+                child: const Text(
+                  'All Transactions',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 11,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 12),
 
           Text(
             '₹${currentBalance.toStringAsFixed(2)}',
@@ -428,11 +511,17 @@ class _LedgerScreenState extends State<LedgerScreen> {
             ),
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 7),
 
-          const Text(
-            'Based on all recorded transactions',
-            style: TextStyle(color: Colors.white70, fontSize: 12),
+          Row(
+            children: [
+              const Icon(Icons.trending_up, color: gold, size: 19),
+              const SizedBox(width: 7),
+              const Text(
+                'Based on all recorded transactions',
+                style: TextStyle(color: Colors.white70, fontSize: 12),
+              ),
+            ],
           ),
         ],
       ),
@@ -455,7 +544,14 @@ class _LedgerScreenState extends State<LedgerScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 3),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -477,7 +573,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
               children: [
                 Text(
                   title,
-                  style: TextStyle(color: Colors.grey.shade600, fontSize: 12),
+                  style: const TextStyle(color: mutedText, fontSize: 12),
                 ),
 
                 const SizedBox(height: 4),
@@ -485,7 +581,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                 Text(
                   '₹${amount.toStringAsFixed(0)}',
                   style: const TextStyle(
-                    color: Color(0xFF26332A),
+                    color: deepForest,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
@@ -508,20 +604,24 @@ class _LedgerScreenState extends State<LedgerScreen> {
     return ChoiceChip(
       label: Text(filter),
       selected: isSelected,
+
       onSelected: (_) {
         setState(() {
           selectedFilter = filter;
         });
       },
-      selectedColor: const Color(0xFF2E7D32),
+
+      selectedColor: deepForest,
       backgroundColor: Colors.white,
+      checkmarkColor: Colors.white,
+
       labelStyle: TextStyle(
-        color: isSelected ? Colors.white : const Color(0xFF26332A),
+        color: isSelected ? Colors.white : deepForest,
         fontWeight: FontWeight.w600,
       ),
-      side: BorderSide(
-        color: isSelected ? const Color(0xFF2E7D32) : Colors.grey.shade200,
-      ),
+
+      side: BorderSide(color: isSelected ? gold : borderGreen),
+
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     );
   }
@@ -533,12 +633,10 @@ class _LedgerScreenState extends State<LedgerScreen> {
   Widget _buildTransactionCard(Map<String, dynamic> transaction) {
     final bool isIncome = transaction['isIncome'] == true;
 
-    final Color color = isIncome
-        ? const Color(0xFF2E7D32)
-        : const Color(0xFFC62828);
+    final Color color = isIncome ? mainGreen : errorRed;
 
     final Color backgroundColor = isIncome
-        ? const Color(0xFFE8F5E9)
+        ? const Color(0xFFE8F0E8)
         : const Color(0xFFFFEBEE);
 
     final IconData icon = isIncome ? Icons.arrow_downward : Icons.arrow_upward;
@@ -553,7 +651,14 @@ class _LedgerScreenState extends State<LedgerScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
+        boxShadow: [
+          BoxShadow(
+            color: deepForest.withValues(alpha: 0.035),
+            blurRadius: 7,
+            offset: const Offset(0, 2),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -582,9 +687,12 @@ class _LedgerScreenState extends State<LedgerScreen> {
               children: [
                 Text(
                   transaction['title'].toString(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w600,
+                    color: deepForest,
                   ),
                 ),
 
@@ -593,7 +701,9 @@ class _LedgerScreenState extends State<LedgerScreen> {
                 Text(
                   '${transaction['category']} • '
                   '${transaction['date']}',
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade600),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(fontSize: 11, color: mutedText),
                 ),
 
                 const SizedBox(height: 3),
@@ -602,7 +712,12 @@ class _LedgerScreenState extends State<LedgerScreen> {
                   partyName.isNotEmpty
                       ? '${transaction['payment']} • $partyName'
                       : transaction['payment'].toString(),
-                  style: TextStyle(fontSize: 11, color: Colors.grey.shade500),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontSize: 11,
+                    color: mutedText.withValues(alpha: 0.85),
+                  ),
                 ),
               ],
             ),
@@ -640,15 +755,11 @@ class _LedgerScreenState extends State<LedgerScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100),
+        border: Border.all(color: borderGreen),
       ),
       child: Column(
         children: [
-          Icon(
-            Icons.receipt_long_outlined,
-            size: 55,
-            color: Colors.grey.shade400,
-          ),
+          Icon(Icons.receipt_long_outlined, size: 55, color: olive),
 
           const SizedBox(height: 14),
 
@@ -657,7 +768,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF26332A),
+              color: deepForest,
             ),
           ),
 
@@ -668,7 +779,7 @@ class _LedgerScreenState extends State<LedgerScreen> {
                 ? 'Try a different search or filter.'
                 : 'Add an income or expense to see it here.',
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
+            style: const TextStyle(fontSize: 12, color: mutedText),
           ),
         ],
       ),

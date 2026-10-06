@@ -10,16 +10,43 @@ class CustomersScreen extends StatefulWidget {
 }
 
 class _CustomersScreenState extends State<CustomersScreen> {
+  // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+  static const Color errorRed = Color(0xFFC62828);
+
+  // ============================================================
+  // STATE
+  // ============================================================
+
   final TextEditingController searchController = TextEditingController();
 
   List<Map<String, dynamic>> customers = [];
+
   bool isLoading = true;
+
+  // ============================================================
+  // INIT
+  // ============================================================
 
   @override
   void initState() {
     super.initState();
     _loadCustomers();
   }
+
+  // ============================================================
+  // LOAD CUSTOMERS
+  // ============================================================
 
   Future<void> _loadCustomers() async {
     try {
@@ -42,6 +69,10 @@ class _CustomersScreenState extends State<CustomersScreen> {
     }
   }
 
+  // ============================================================
+  // REFRESH
+  // ============================================================
+
   Future<void> _refreshCustomers() async {
     if (mounted) {
       setState(() {
@@ -52,6 +83,10 @@ class _CustomersScreenState extends State<CustomersScreen> {
     await _loadCustomers();
   }
 
+  // ============================================================
+  // FILTERED CUSTOMERS
+  // ============================================================
+
   List<Map<String, dynamic>> get filteredCustomers {
     final search = searchController.text.trim().toLowerCase();
 
@@ -61,18 +96,28 @@ class _CustomersScreenState extends State<CustomersScreen> {
 
     return customers.where((customer) {
       final name = customer['name']?.toString().toLowerCase() ?? '';
+
       final phone = customer['phone']?.toString().toLowerCase() ?? '';
 
       return name.contains(search) || phone.contains(search);
     }).toList();
   }
 
+  // ============================================================
+  // TOTAL RECEIVABLE
+  // ============================================================
+
   double get totalReceivable {
     return customers.fold(0.0, (sum, customer) {
       final receivable = (customer['receivable'] as num?)?.toDouble() ?? 0.0;
+
       return sum + receivable;
     });
   }
+
+  // ============================================================
+  // MESSAGE
+  // ============================================================
 
   void _showMessage(String message) {
     if (!mounted) return;
@@ -81,10 +126,16 @@ class _CustomersScreenState extends State<CustomersScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
+
+  // ============================================================
+  // DISPOSE
+  // ============================================================
 
   @override
   void dispose() {
@@ -92,39 +143,51 @@ class _CustomersScreenState extends State<CustomersScreen> {
     super.dispose();
   }
 
+  // ============================================================
+  // BUILD
+  // ============================================================
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
+
+      // ==========================================================
+      // APP BAR
+      // ==========================================================
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: cream,
         elevation: 0,
+        surfaceTintColor: Colors.transparent,
+
         leading: IconButton(
           onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
+
         title: const Text(
           'Customers',
-          style: TextStyle(
-            color: Color(0xFF1B5E20),
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
         ),
+
         actions: [
           IconButton(
             onPressed: _refreshCustomers,
-            icon: const Icon(Icons.refresh, color: Color(0xFF1B5E20)),
+            icon: const Icon(Icons.refresh, color: deepForest),
             tooltip: 'Refresh',
           ),
         ],
       ),
+
+      // ==========================================================
+      // BODY
+      // ==========================================================
       body: SafeArea(
         child: isLoading
-            ? const Center(
-                child: CircularProgressIndicator(color: Color(0xFF2E7D32)),
-              )
+            ? const Center(child: CircularProgressIndicator(color: gold))
             : RefreshIndicator(
-                color: const Color(0xFF2E7D32),
+                color: gold,
+                backgroundColor: softCream,
                 onRefresh: _refreshCustomers,
                 child: SingleChildScrollView(
                   physics: const AlwaysScrollableScrollPhysics(),
@@ -136,24 +199,30 @@ class _CustomersScreenState extends State<CustomersScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildSummaryCard(),
+
                           const SizedBox(height: 22),
+
+                          // ========================================
+                          // CUSTOMER LIST HEADER
+                          // ========================================
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               const Text(
                                 'Customer List',
                                 style: TextStyle(
-                                  color: Color(0xFF26332A),
+                                  color: deepForest,
                                   fontSize: 19,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
+
                               ElevatedButton.icon(
                                 onPressed: _showAddCustomerDialog,
                                 icon: const Icon(Icons.add, size: 18),
                                 label: const Text('Add Customer'),
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF2E7D32),
+                                  backgroundColor: deepForest,
                                   foregroundColor: Colors.white,
                                   elevation: 0,
                                   padding: const EdgeInsets.symmetric(
@@ -162,20 +231,29 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                   ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
+                                    side: const BorderSide(color: gold),
                                   ),
                                 ),
                               ),
                             ],
                           ),
+
                           const SizedBox(height: 14),
+
+                          // ========================================
+                          // SEARCH
+                          // ========================================
                           TextField(
                             controller: searchController,
-                            onChanged: (_) => setState(() {}),
+                            onChanged: (_) {
+                              setState(() {});
+                            },
                             decoration: InputDecoration(
                               hintText: 'Search customers',
+                              hintStyle: const TextStyle(color: mutedText),
                               prefixIcon: const Icon(
                                 Icons.search,
-                                color: Color(0xFF2E7D32),
+                                color: olive,
                               ),
                               suffixIcon: searchController.text.isNotEmpty
                                   ? IconButton(
@@ -183,31 +261,45 @@ class _CustomersScreenState extends State<CustomersScreen> {
                                         searchController.clear();
                                         setState(() {});
                                       },
-                                      icon: const Icon(Icons.clear),
+                                      icon: const Icon(
+                                        Icons.clear,
+                                        color: mutedText,
+                                      ),
                                     )
                                   : null,
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide.none,
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
-                                borderSide: BorderSide(
-                                  color: Colors.grey.shade200,
+                                borderSide: const BorderSide(
+                                  color: borderGreen,
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(14),
                                 borderSide: const BorderSide(
-                                  color: Color(0xFF2E7D32),
+                                  color: gold,
                                   width: 1.5,
                                 ),
                               ),
                             ),
                           ),
+
                           const SizedBox(height: 18),
+
+                          // ========================================
+                          // CUSTOMER LIST
+                          // ========================================
                           if (filteredCustomers.isEmpty)
                             _buildEmptyState()
                           else
@@ -222,18 +314,25 @@ class _CustomersScreenState extends State<CustomersScreen> {
     );
   }
 
+  // ============================================================
+  // SUMMARY CARD
+  // ============================================================
+
   Widget _buildSummaryCard() {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [Color(0xFF2E7D32), Color(0xFF388E3C)],
+          colors: [deepForest, mainGreen],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: gold, width: 1),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF2E7D32).withValues(alpha: 0.18),
+            color: deepForest.withValues(alpha: 0.18),
             blurRadius: 16,
             offset: const Offset(0, 7),
           ),
@@ -245,8 +344,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
             width: 50,
             height: 50,
             decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.15),
+              color: gold.withValues(alpha: 0.15),
               shape: BoxShape.circle,
+              border: Border.all(color: gold.withValues(alpha: 0.45)),
             ),
             child: const Icon(
               Icons.people_outline,
@@ -254,7 +354,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
               size: 26,
             ),
           ),
+
           const SizedBox(width: 14),
+
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +365,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                   'Customer Payments',
                   style: TextStyle(color: Colors.white70, fontSize: 13),
                 ),
+
                 const SizedBox(height: 5),
+
                 Text(
                   '₹${totalReceivable.toStringAsFixed(0)}',
                   style: const TextStyle(
@@ -272,7 +376,9 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 3),
+
                 const Text(
                   'Total amount to receive',
                   style: TextStyle(color: Colors.white70, fontSize: 11),
@@ -285,8 +391,13 @@ class _CustomersScreenState extends State<CustomersScreen> {
     );
   }
 
+  // ============================================================
+  // CUSTOMER CARD
+  // ============================================================
+
   Widget _buildCustomerCard(Map<String, dynamic> customer) {
     final receivable = (customer['receivable'] as num?)?.toDouble() ?? 0.0;
+
     final hasPendingPayment = receivable > 0;
 
     return InkWell(
@@ -298,24 +409,40 @@ class _CustomersScreenState extends State<CustomersScreen> {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(17),
-          border: Border.all(color: Colors.grey.shade100),
+          border: Border.all(color: borderGreen),
+          boxShadow: [
+            BoxShadow(
+              color: deepForest.withValues(alpha: 0.035),
+              blurRadius: 7,
+              offset: const Offset(0, 2),
+            ),
+          ],
         ),
         child: Row(
           children: [
+            // ======================================================
+            // CUSTOMER ICON
+            // ======================================================
+
             Container(
               width: 48,
               height: 48,
               decoration: const BoxDecoration(
-                color: Color(0xFFE8F5E9),
+                color: Color(0xFFE8F0E8),
                 shape: BoxShape.circle,
               ),
               child: const Icon(
                 Icons.person_outline,
-                color: Color(0xFF2E7D32),
+                color: mainGreen,
                 size: 25,
               ),
             ),
+
             const SizedBox(width: 13),
+
+            // ======================================================
+            // CUSTOMER DETAILS
+            // ======================================================
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -325,24 +452,28 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF26332A),
+                      color: deepForest,
                     ),
                   ),
+
                   const SizedBox(height: 4),
+
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.phone_outlined,
                         size: 13,
-                        color: Colors.grey.shade500,
+                        color: mutedText,
                       ),
+
                       const SizedBox(width: 4),
+
                       Expanded(
                         child: Text(
                           customer['phone']?.toString() ?? 'Not provided',
-                          style: TextStyle(
+                          style: const TextStyle(
                             fontSize: 11,
-                            color: Colors.grey.shade600,
+                            color: mutedText,
                           ),
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -352,6 +483,12 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 ],
               ),
             ),
+
+            const SizedBox(width: 8),
+
+            // ======================================================
+            // RECEIVABLE
+            // ======================================================
             Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -360,30 +497,34 @@ class _CustomersScreenState extends State<CustomersScreen> {
                       ? '₹${receivable.toStringAsFixed(0)}'
                       : 'Paid',
                   style: TextStyle(
-                    color: hasPendingPayment
-                        ? const Color(0xFFE65100)
-                        : const Color(0xFF2E7D32),
+                    color: hasPendingPayment ? gold : mainGreen,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
+
                 const SizedBox(height: 4),
+
                 Text(
                   hasPendingPayment ? 'To receive' : 'No pending',
-                  style: TextStyle(color: Colors.grey.shade500, fontSize: 10),
+                  style: const TextStyle(color: mutedText, fontSize: 10),
                 ),
               ],
             ),
+
             const SizedBox(width: 8),
-            const Icon(Icons.chevron_right, color: Colors.grey, size: 20),
+
+            const Icon(Icons.chevron_right, color: mutedText, size: 20),
           ],
         ),
       ),
     );
   }
 
-  // Customer details now has editable Name, Phone Number,
-  // and Amount to Receive fields.
+  // ============================================================
+  // CUSTOMER DETAILS / EDIT
+  // ============================================================
+
   void _showCustomerDetails(Map<String, dynamic> customer) {
     final customerId = (customer['id'] as num?)?.toInt();
 
@@ -410,117 +551,75 @@ class _CustomersScreenState extends State<CustomersScreen> {
       context: context,
       builder: (dialogContext) {
         final navigator = Navigator.of(dialogContext);
-        final messenger = ScaffoldMessenger.of(context);
 
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+
           title: Row(
             children: [
               Container(
                 width: 42,
                 height: 42,
                 decoration: const BoxDecoration(
-                  color: Color(0xFFE8F5E9),
+                  color: Color(0xFFE8F0E8),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
-                  Icons.person_outline,
-                  color: Color(0xFF2E7D32),
-                ),
+                child: const Icon(Icons.person_outline, color: mainGreen),
               ),
+
               const SizedBox(width: 12),
+
               const Expanded(
                 child: Text(
                   'Customer Details',
                   style: TextStyle(
-                    color: Color(0xFF1B5E20),
+                    color: deepForest,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
             ],
           ),
+
           content: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                TextField(
+                _buildDialogTextField(
                   controller: nameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: InputDecoration(
-                    labelText: 'Customer Name',
-                    prefixIcon: const Icon(
-                      Icons.person_outline,
-                      color: Color(0xFF2E7D32),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF2E7D32),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
+                  label: 'Customer Name',
+                  icon: Icons.person_outline,
+                  capitalization: TextCapitalization.words,
                 ),
+
                 const SizedBox(height: 14),
-                TextField(
+
+                _buildDialogTextField(
                   controller: phoneController,
+                  label: 'Phone Number',
+                  icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: 'Phone Number',
-                    prefixIcon: const Icon(
-                      Icons.phone_outlined,
-                      color: Color(0xFF2E7D32),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF2E7D32),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
                 ),
+
                 const SizedBox(height: 14),
-                TextField(
+
+                _buildDialogTextField(
                   controller: receivableController,
+                  label: 'Amount to Receive',
+                  hint: 'Enter receivable amount',
+                  icon: Icons.currency_rupee,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
-                  decoration: InputDecoration(
-                    labelText: 'Amount to Receive',
-                    prefixText: '₹ ',
-                    hintText: 'Enter receivable amount',
-                    prefixIcon: const Icon(
-                      Icons.currency_rupee,
-                      color: Color(0xFF2E7D32),
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xFFF6FAF6),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: BorderSide.none,
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                      borderSide: const BorderSide(
-                        color: Color(0xFF2E7D32),
-                        width: 1.5,
-                      ),
-                    ),
-                  ),
+                  prefixText: '₹ ',
                 ),
               ],
             ),
           ),
+
           actions: [
             TextButton(
               onPressed: () async {
@@ -529,49 +628,43 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 if (!mounted) return;
 
                 navigator.pop();
+
                 await _loadCustomers();
 
                 if (!mounted) return;
 
-                messenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('Customer deleted successfully.'),
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: Color(0xFFC62828),
-                  ),
-                );
+                _showMessage('Customer deleted successfully.');
               },
-              child: const Text(
-                'Delete',
-                style: TextStyle(color: Color(0xFFC62828)),
-              ),
+              child: const Text('Delete', style: TextStyle(color: errorRed)),
             ),
+
             TextButton(
               onPressed: () => navigator.pop(),
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
+
             ElevatedButton(
               onPressed: () async {
                 final name = nameController.text.trim();
+
                 final phone = phoneController.text.trim();
+
                 final amount = double.tryParse(
                   receivableController.text.trim(),
                 );
 
                 if (name.isEmpty) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter customer name.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter customer name.',
                   );
                   return;
                 }
 
                 if (amount == null || amount < 0) {
-                  ScaffoldMessenger.of(dialogContext).showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid amount.'),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter a valid amount.',
                   );
                   return;
                 }
@@ -585,24 +678,20 @@ class _CustomersScreenState extends State<CustomersScreen> {
                 if (!mounted) return;
 
                 navigator.pop();
+
                 await _loadCustomers();
 
                 if (!mounted) return;
 
-                messenger.showSnackBar(
-                  const SnackBar(
-                    content: Text('Customer details updated successfully 🌱'),
-                    behavior: SnackBarBehavior.floating,
-                    backgroundColor: Color(0xFF2E7D32),
-                  ),
-                );
+                _showMessage('Customer details updated successfully 🌱');
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2E7D32),
+                backgroundColor: deepForest,
                 foregroundColor: Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: gold),
                 ),
               ),
               child: const Text('Save'),
@@ -613,148 +702,97 @@ class _CustomersScreenState extends State<CustomersScreen> {
     );
   }
 
-  Widget _buildEmptyState() {
-    final hasCustomers = customers.isNotEmpty;
-
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 20),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: Colors.grey.shade100),
-      ),
-      child: Column(
-        children: [
-          Icon(Icons.people_outline, size: 55, color: Colors.grey.shade400),
-          const SizedBox(height: 14),
-          Text(
-            hasCustomers ? 'No customers found' : 'No customers yet',
-            style: const TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Color(0xFF26332A),
-            ),
-          ),
-          const SizedBox(height: 5),
-          Text(
-            hasCustomers
-                ? 'Try a different search.'
-                : 'Add your first customer to get started.',
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 12, color: Colors.grey.shade600),
-          ),
-        ],
-      ),
-    );
-  }
+  // ============================================================
+  // ADD CUSTOMER DIALOG
+  // ============================================================
 
   void _showAddCustomerDialog() {
     final nameController = TextEditingController();
+
     final phoneController = TextEditingController();
+
     final receivableController = TextEditingController();
 
     showDialog(
       context: context,
       builder: (dialogContext) {
         final navigator = Navigator.of(dialogContext);
-        final messenger = ScaffoldMessenger.of(context);
 
         return AlertDialog(
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
+
           title: const Text(
             'Add Customer',
-            style: TextStyle(
-              color: Color(0xFF1B5E20),
-              fontWeight: FontWeight.bold,
+            style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
+          ),
+
+          content: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _buildDialogTextField(
+                  controller: nameController,
+                  label: 'Customer Name',
+                  icon: Icons.person_outline,
+                  capitalization: TextCapitalization.words,
+                ),
+
+                const SizedBox(height: 14),
+
+                _buildDialogTextField(
+                  controller: phoneController,
+                  label: 'Phone Number',
+                  icon: Icons.phone_outlined,
+                  keyboardType: TextInputType.phone,
+                ),
+
+                const SizedBox(height: 14),
+
+                _buildDialogTextField(
+                  controller: receivableController,
+                  label: 'Amount to Receive',
+                  hint: 'Enter receivable amount',
+                  icon: Icons.currency_rupee,
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                  ),
+                  prefixText: '₹ ',
+                ),
+              ],
             ),
           ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: nameController,
-                textCapitalization: TextCapitalization.words,
-                decoration: InputDecoration(
-                  labelText: 'Customer Name',
-                  prefixIcon: const Icon(
-                    Icons.person_outline,
-                    color: Color(0xFF2E7D32),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                controller: phoneController,
-                keyboardType: TextInputType.phone,
-                decoration: InputDecoration(
-                  labelText: 'Phone Number',
-                  prefixIcon: const Icon(
-                    Icons.phone_outlined,
-                    color: Color(0xFF2E7D32),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 14),
-              TextField(
-                controller: receivableController,
-                keyboardType: const TextInputType.numberWithOptions(
-                  decimal: true,
-                ),
-                decoration: InputDecoration(
-                  labelText: 'Amount to Receive',
-                  hintText: 'Enter receivable amount',
-                  prefixText: '₹ ',
-                  prefixIcon: const Icon(
-                    Icons.currency_rupee,
-                    color: Color(0xFF2E7D32),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              ),
-            ],
-          ),
+
           actions: [
             TextButton(
               onPressed: () => navigator.pop(),
-              child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
+
             ElevatedButton(
               onPressed: () async {
                 final name = nameController.text.trim();
+
                 final phone = phoneController.text.trim();
+
                 final amount = double.tryParse(
                   receivableController.text.trim(),
                 );
 
                 if (name.isEmpty) {
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter customer name.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF26332A),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter customer name.',
                   );
                   return;
                 }
 
                 if (amount == null || amount < 0) {
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Please enter a valid amount.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF26332A),
-                    ),
+                  _showDialogMessage(
+                    dialogContext,
+                    'Please enter a valid amount.',
                   );
                   return;
                 }
@@ -779,37 +817,132 @@ class _CustomersScreenState extends State<CustomersScreen> {
                     isLoading = false;
                   });
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Customer added successfully 🌱'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFF2E7D32),
-                    ),
-                  );
+                  _showMessage('Customer added successfully 🌱');
                 } catch (e) {
                   if (!mounted) return;
 
                   navigator.pop();
 
-                  messenger.showSnackBar(
-                    const SnackBar(
-                      content: Text('Failed to add customer.'),
-                      behavior: SnackBarBehavior.floating,
-                      backgroundColor: Color(0xFFC62828),
-                    ),
-                  );
+                  _showMessage('Failed to add customer.');
                 }
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF2E7D32),
+                backgroundColor: deepForest,
                 foregroundColor: Colors.white,
                 elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  side: const BorderSide(color: gold),
+                ),
               ),
               child: const Text('Add'),
             ),
           ],
         );
       },
+    );
+  }
+
+  // ============================================================
+  // DIALOG TEXT FIELD
+  // ============================================================
+
+  Widget _buildDialogTextField({
+    required TextEditingController controller,
+    required String label,
+    required IconData icon,
+    String? hint,
+    TextInputType? keyboardType,
+    TextCapitalization capitalization = TextCapitalization.none,
+    String? prefixText,
+  }) {
+    return TextField(
+      controller: controller,
+      keyboardType: keyboardType,
+      textCapitalization: capitalization,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hint,
+        prefixText: prefixText,
+
+        prefixIcon: Icon(icon, color: mainGreen),
+
+        filled: true,
+        fillColor: Colors.white,
+
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderGreen),
+        ),
+
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderGreen),
+        ),
+
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: gold, width: 1.5),
+        ),
+      ),
+    );
+  }
+
+  // ============================================================
+  // DIALOG MESSAGE
+  // ============================================================
+
+  void _showDialogMessage(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(message),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: deepForest,
+      ),
+    );
+  }
+
+  // ============================================================
+  // EMPTY STATE
+  // ============================================================
+
+  Widget _buildEmptyState() {
+    final hasCustomers = customers.isNotEmpty;
+
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 45, horizontal: 20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(18),
+        border: Border.all(color: borderGreen),
+      ),
+      child: Column(
+        children: [
+          const Icon(Icons.people_outline, size: 55, color: olive),
+
+          const SizedBox(height: 14),
+
+          Text(
+            hasCustomers ? 'No customers found' : 'No customers yet',
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: deepForest,
+            ),
+          ),
+
+          const SizedBox(height: 5),
+
+          Text(
+            hasCustomers
+                ? 'Try a different search.'
+                : 'Add your first customer to get started.',
+            textAlign: TextAlign.center,
+            style: const TextStyle(fontSize: 12, color: mutedText),
+          ),
+        ],
+      ),
     );
   }
 }

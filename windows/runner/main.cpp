@@ -29,11 +29,8 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance,
 
   FlutterWindow window(project);
 
-  // Initial position of the VijayaGreen window.
   Win32Window::Point origin(100, 50);
-
-  // Initial window size.
-  Win32Window::Size size(1200, 800);
+  Win32Window::Size size(430, 800);
 
   if (!window.Create(L"VijayaGreen", origin, size)) {
     return EXIT_FAILURE;

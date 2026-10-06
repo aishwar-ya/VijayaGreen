@@ -11,6 +11,19 @@ class CreateAccountScreen extends StatefulWidget {
 
 class _CreateAccountScreenState extends State<CreateAccountScreen> {
   // ============================================================
+  // GOLDEN GREEN THEME
+  // ============================================================
+
+  static const Color deepForest = Color(0xFF123524);
+  static const Color mainGreen = Color(0xFF24543A);
+  static const Color gold = Color(0xFFD4A72C);
+  static const Color olive = Color(0xFF7B8F3A);
+  static const Color cream = Color(0xFFF7F3E7);
+  static const Color softCream = Color(0xFFFCFAF3);
+  static const Color mutedText = Color(0xFF687267);
+  static const Color borderGreen = Color(0xFFD7E2D5);
+
+  // ============================================================
   // CONTROLLERS
   // ============================================================
 
@@ -105,9 +118,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       barrierDismissible: false,
       builder: (dialogContext) {
         return AlertDialog(
-          backgroundColor: Colors.white,
+          backgroundColor: softCream,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(22),
+            side: const BorderSide(color: gold, width: 1),
           ),
           contentPadding: const EdgeInsets.fromLTRB(24, 30, 24, 24),
           content: Column(
@@ -117,14 +131,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               Container(
                 width: 76,
                 height: 76,
-                decoration: const BoxDecoration(
-                  color: Color(0xFFE8F5E9),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE8F0E5),
                   shape: BoxShape.circle,
+                  border: Border.all(
+                    color: gold.withValues(alpha: 0.45),
+                    width: 1,
+                  ),
                 ),
                 child: const Icon(
                   Icons.check_circle_outline,
                   size: 46,
-                  color: Color(0xFF2E7D32),
+                  color: mainGreen,
                 ),
               ),
 
@@ -136,7 +154,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 style: TextStyle(
                   fontSize: 23,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF1B5E20),
+                  color: deepForest,
                 ),
               ),
 
@@ -146,11 +164,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                 'Your VijayaGreen owner account has been '
                 'created successfully.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xFF6B756B),
-                  height: 1.5,
-                ),
+                style: TextStyle(fontSize: 14, color: mutedText, height: 1.5),
               ),
 
               const SizedBox(height: 24),
@@ -171,11 +185,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     );
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF2E7D32),
+                    backgroundColor: deepForest,
                     foregroundColor: Colors.white,
-                    elevation: 0,
+                    elevation: 2,
+                    shadowColor: gold.withValues(alpha: 0.35),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(13),
+                      side: const BorderSide(color: gold, width: 1),
                     ),
                   ),
                   child: const Text(
@@ -200,7 +216,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       SnackBar(
         content: Text(message),
         behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF26332A),
+        backgroundColor: deepForest,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        margin: const EdgeInsets.all(16),
       ),
     );
   }
@@ -216,23 +234,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   }) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFF7A847A), fontSize: 15),
-      prefixIcon: Icon(icon, color: const Color(0xFF2E7D32)),
+      hintStyle: const TextStyle(color: mutedText, fontSize: 15),
+      prefixIcon: Icon(icon, color: mainGreen),
       suffixIcon: suffix,
       filled: true,
       fillColor: Colors.white,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFFD8E6D8)),
+        borderSide: const BorderSide(color: borderGreen),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFFD8E6D8)),
+        borderSide: const BorderSide(color: borderGreen),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(14),
-        borderSide: const BorderSide(color: Color(0xFF2E7D32), width: 2),
+        borderSide: const BorderSide(color: gold, width: 2),
       ),
     );
   }
@@ -247,7 +265,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       style: const TextStyle(
         fontSize: 14,
         fontWeight: FontWeight.w600,
-        color: Color(0xFF374137),
+        color: deepForest,
       ),
     );
   }
@@ -259,13 +277,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF6FAF6),
+      backgroundColor: cream,
 
       // ==========================================================
       // APP BAR
       // ==========================================================
       appBar: AppBar(
-        backgroundColor: const Color(0xFFF6FAF6),
+        backgroundColor: cream,
         elevation: 0,
         surfaceTintColor: Colors.transparent,
 
@@ -273,13 +291,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
           onPressed: () {
             Navigator.pop(context);
           },
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
+          icon: const Icon(Icons.arrow_back, color: deepForest),
         ),
 
         title: const Text(
           'Create Owner Account',
           style: TextStyle(
-            color: Color(0xFF1B5E20),
+            color: deepForest,
             fontWeight: FontWeight.bold,
             fontSize: 18,
           ),
@@ -307,9 +325,25 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   // ==================================================
 
                   Center(
-                    child: SizedBox(
-                      width: 250,
-                      height: 185,
+                    child: Container(
+                      width: 270,
+                      height: 195,
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: softCream,
+                        borderRadius: BorderRadius.circular(30),
+                        border: Border.all(
+                          color: gold.withValues(alpha: 0.35),
+                          width: 1,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: deepForest.withValues(alpha: 0.07),
+                            blurRadius: 20,
+                            offset: const Offset(0, 8),
+                          ),
+                        ],
+                      ),
                       child: Image.asset(
                         'assets/images/vijayagreen_logo.png',
                         fit: BoxFit.contain,
@@ -317,7 +351,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 2),
+                  const SizedBox(height: 10),
 
                   // ==================================================
                   // TAGLINE
@@ -328,7 +362,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 15,
-                        color: Color(0xFF687368),
+                        color: mutedText,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
@@ -346,21 +380,18 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       style: TextStyle(
                         fontSize: 21,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF1B5E20),
+                        color: deepForest,
                       ),
                     ),
                   ),
 
                   const SizedBox(height: 7),
 
-                  Center(
+                  const Center(
                     child: Text(
                       'Set up your garden details to get started.',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey.shade600,
-                      ),
+                      style: TextStyle(fontSize: 14, color: mutedText),
                     ),
                   ),
 
@@ -461,7 +492,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           obscurePassword
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: Colors.grey.shade600,
+                          color: olive,
                         ),
                       ),
                     ),
@@ -492,7 +523,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           obscureConfirmPassword
                               ? Icons.visibility_outlined
                               : Icons.visibility_off_outlined,
-                          color: Colors.grey.shade600,
+                          color: olive,
                         ),
                       ),
                     ),
@@ -517,11 +548,13 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ),
                       ),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF2E7D32),
+                        backgroundColor: deepForest,
                         foregroundColor: Colors.white,
                         elevation: 2,
+                        shadowColor: gold.withValues(alpha: 0.35),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(14),
+                          side: const BorderSide(color: gold, width: 1),
                         ),
                       ),
                     ),
@@ -537,13 +570,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                       onPressed: () {
                         Navigator.pop(context);
                       },
-                      style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFF2E7D32),
-                      ),
+                      style: TextButton.styleFrom(foregroundColor: mainGreen),
                       child: const Text(
                         'Already have an account? Login',
                         style: TextStyle(
-                          color: Color(0xFF2E7D32),
+                          color: mainGreen,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -558,11 +589,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(
-                        Icons.eco_outlined,
-                        size: 17,
-                        color: Colors.grey.shade600,
-                      ),
+                      const Icon(Icons.eco_outlined, size: 17, color: olive),
                       const SizedBox(width: 6),
                       Text(
                         'Vijaya Garden',
