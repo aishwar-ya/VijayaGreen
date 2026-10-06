@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../database/database_helper.dart';
+
 class ExpenseScreen extends StatefulWidget {
   const ExpenseScreen({super.key});
 
@@ -9,9 +11,7 @@ class ExpenseScreen extends StatefulWidget {
 
 class _ExpenseScreenState extends State<ExpenseScreen> {
   final TextEditingController amountController = TextEditingController();
-
   final TextEditingController supplierController = TextEditingController();
-
   final TextEditingController notesController = TextEditingController();
 
   String selectedCategory = 'Fertilizer';
@@ -78,7 +78,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
   // SAVE EXPENSE
   // ============================================================
 
-  void _saveExpense() {
+  Future<void> _saveExpense() async {
     final amount = amountController.text.trim();
 
     if (amount.isEmpty) {
@@ -93,7 +93,25 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
       return;
     }
 
-    _showSuccessDialog(parsedAmount);
+    try {
+      await DatabaseHelper.instance.insertTransaction({
+        'type': 'expense',
+        'category': selectedCategory,
+        'description': notesController.text.trim(),
+        'amount': parsedAmount,
+        'date': selectedDate.toIso8601String(),
+        'partyName': supplierController.text.trim(),
+        'paymentMethod': selectedPaymentMethod,
+      });
+
+      if (!mounted) return;
+
+      _showSuccessDialog(parsedAmount);
+    } catch (e) {
+      if (!mounted) return;
+
+      _showMessage('Failed to save expense.');
+    }
   }
 
   // ============================================================
@@ -125,9 +143,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   color: Color(0xFFC62828),
                 ),
               ),
-
               const SizedBox(height: 18),
-
               const Text(
                 'Expense Added',
                 style: TextStyle(
@@ -136,9 +152,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   color: Color(0xFFB71C1C),
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Text(
                 '₹${amount.toStringAsFixed(2)} has been recorded as an expense.',
                 textAlign: TextAlign.center,
@@ -148,9 +162,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                   height: 1.4,
                 ),
               ),
-
               const SizedBox(height: 22),
-
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -275,7 +287,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
+              constraints: const BoxConstraints(maxWidth: 390),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -297,9 +309,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                           size: 34,
                           color: Color(0xFFC62828),
                         ),
-
                         SizedBox(width: 14),
-
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,9 +322,7 @@ class _ExpenseScreenState extends State<ExpenseScreen> {
                                   color: Color(0xFFB71C1C),
                                 ),
                               ),
-
                               SizedBox(height: 4),
-
                               Text(
                                 'Add money spent by Vijaya Garden.',
                                 style: TextStyle(

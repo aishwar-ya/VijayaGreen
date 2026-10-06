@@ -143,7 +143,8 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               const SizedBox(height: 10),
 
               const Text(
-                'Your VijayaGreen owner account has been created successfully.',
+                'Your VijayaGreen owner account has been '
+                'created successfully.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 14,
@@ -293,9 +294,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 40),
+            padding: const EdgeInsets.fromLTRB(20, 12, 20, 40),
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 460),
+              // SAME MOBILE WIDTH AS LOGIN SCREEN
+              constraints: const BoxConstraints(maxWidth: 390),
+
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

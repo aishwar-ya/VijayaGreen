@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../database/database_helper.dart';
+
 class IncomeScreen extends StatefulWidget {
   const IncomeScreen({super.key});
 
@@ -9,14 +11,11 @@ class IncomeScreen extends StatefulWidget {
 
 class _IncomeScreenState extends State<IncomeScreen> {
   final TextEditingController amountController = TextEditingController();
-
   final TextEditingController customerController = TextEditingController();
-
   final TextEditingController notesController = TextEditingController();
 
   String selectedCategory = 'Plant Sales';
   String selectedPaymentMethod = 'Cash';
-
   DateTime selectedDate = DateTime.now();
 
   final List<String> categories = [
@@ -44,10 +43,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
     super.dispose();
   }
 
-  // ============================================================
-  // DATE PICKER
-  // ============================================================
-
   Future<void> _selectDate() async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -71,11 +66,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
     }
   }
 
-  // ============================================================
-  // SAVE INCOME
-  // ============================================================
-
-  void _saveIncome() {
+  Future<void> _saveIncome() async {
     final amount = amountController.text.trim();
 
     if (amount.isEmpty) {
@@ -90,12 +81,25 @@ class _IncomeScreenState extends State<IncomeScreen> {
       return;
     }
 
-    _showSuccessDialog(parsedAmount);
-  }
+    try {
+      await DatabaseHelper.instance.insertTransaction({
+        'type': 'income',
+        'category': selectedCategory,
+        'description': notesController.text.trim(),
+        'amount': parsedAmount,
+        'date': selectedDate.toIso8601String(),
+        'partyName': customerController.text.trim(),
+        'paymentMethod': selectedPaymentMethod,
+      });
 
-  // ============================================================
-  // SUCCESS DIALOG
-  // ============================================================
+      if (!mounted) return;
+
+      _showSuccessDialog(parsedAmount);
+    } catch (e) {
+      if (!mounted) return;
+      _showMessage('Failed to save income.');
+    }
+  }
 
   void _showSuccessDialog(double amount) {
     showDialog(
@@ -122,9 +126,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   color: Color(0xFF2E7D32),
                 ),
               ),
-
               const SizedBox(height: 18),
-
               const Text(
                 'Income Added',
                 style: TextStyle(
@@ -133,9 +135,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   color: Color(0xFF1B5E20),
                 ),
               ),
-
               const SizedBox(height: 10),
-
               Text(
                 '₹${amount.toStringAsFixed(2)} has been recorded as income.',
                 textAlign: TextAlign.center,
@@ -145,9 +145,7 @@ class _IncomeScreenState extends State<IncomeScreen> {
                   height: 1.4,
                 ),
               ),
-
               const SizedBox(height: 22),
-
               SizedBox(
                 width: double.infinity,
                 height: 48,
@@ -177,10 +175,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  // ============================================================
-  // MESSAGE
-  // ============================================================
-
   void _showMessage(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -191,19 +185,13 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  // ============================================================
-  // INPUT DECORATION
-  // ============================================================
-
   InputDecoration _inputDecoration({
     required String hint,
     required IconData icon,
-    Widget? suffix,
   }) {
     return InputDecoration(
       hintText: hint,
       prefixIcon: Icon(icon, color: const Color(0xFF4CAF50)),
-      suffixIcon: suffix,
       filled: true,
       fillColor: Colors.white,
       border: OutlineInputBorder(
@@ -221,10 +209,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  // ============================================================
-  // LABEL
-  // ============================================================
-
   Widget _buildLabel(String text) {
     return Text(
       text,
@@ -235,10 +219,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
       ),
     );
   }
-
-  // ============================================================
-  // DROPDOWN
-  // ============================================================
 
   Widget _buildDropdown<T>({
     required T value,
@@ -256,25 +236,15 @@ class _IncomeScreenState extends State<IncomeScreen> {
     );
   }
 
-  // ============================================================
-  // BUILD
-  // ============================================================
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6FAF6),
-
-      // ----------------------------------------------------------
-      // APP BAR
-      // ----------------------------------------------------------
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
+          onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.arrow_back, color: Color(0xFF1B5E20)),
         ),
         title: const Text(
@@ -285,23 +255,16 @@ class _IncomeScreenState extends State<IncomeScreen> {
           ),
         ),
       ),
-
-      // ----------------------------------------------------------
-      // BODY
-      // ----------------------------------------------------------
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.fromLTRB(20, 10, 20, 40),
           child: Center(
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 600),
+              // Same mobile width as Login, Create Account and Dashboard.
+              constraints: const BoxConstraints(maxWidth: 390),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // ------------------------------------------------
-                  // HEADER
-                  // ------------------------------------------------
-
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(20),
@@ -346,13 +309,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 26),
 
-                  // ------------------------------------------------
-                  // AMOUNT
-                  // ------------------------------------------------
                   _buildLabel('Amount'),
-
                   const SizedBox(height: 8),
-
                   TextField(
                     controller: amountController,
                     keyboardType: const TextInputType.numberWithOptions(
@@ -366,13 +324,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ------------------------------------------------
-                  // CATEGORY
-                  // ------------------------------------------------
                   _buildLabel('Income Category'),
-
                   const SizedBox(height: 8),
-
                   _buildDropdown<String>(
                     value: selectedCategory,
                     items: categories,
@@ -387,13 +340,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ------------------------------------------------
-                  // CUSTOMER
-                  // ------------------------------------------------
                   _buildLabel('Customer Name (Optional)'),
-
                   const SizedBox(height: 8),
-
                   TextField(
                     controller: customerController,
                     textCapitalization: TextCapitalization.words,
@@ -405,13 +353,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ------------------------------------------------
-                  // DATE
-                  // ------------------------------------------------
                   _buildLabel('Date'),
-
                   const SizedBox(height: 8),
-
                   InkWell(
                     onTap: _selectDate,
                     borderRadius: BorderRadius.circular(14),
@@ -434,13 +377,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ------------------------------------------------
-                  // PAYMENT METHOD
-                  // ------------------------------------------------
                   _buildLabel('Payment Method'),
-
                   const SizedBox(height: 8),
-
                   DropdownButtonFormField<String>(
                     initialValue: selectedPaymentMethod,
                     isExpanded: true,
@@ -465,13 +403,8 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  // ------------------------------------------------
-                  // NOTES
-                  // ------------------------------------------------
                   _buildLabel('Notes (Optional)'),
-
                   const SizedBox(height: 8),
-
                   TextField(
                     controller: notesController,
                     maxLines: 4,
@@ -484,9 +417,6 @@ class _IncomeScreenState extends State<IncomeScreen> {
 
                   const SizedBox(height: 30),
 
-                  // ------------------------------------------------
-                  // SAVE BUTTON
-                  // ------------------------------------------------
                   SizedBox(
                     width: double.infinity,
                     height: 54,

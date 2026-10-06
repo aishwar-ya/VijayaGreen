@@ -125,24 +125,31 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF6FAF6),
+
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+
+            // ============================================================
+            // STANDARD MOBILE WIDTH
+            // ============================================================
             child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 460),
+              constraints: const BoxConstraints(maxWidth: 390),
+
               child: Form(
                 key: _formKey,
+
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    // =========================================================
+                    // ======================================================
                     // VIJAYAGREEN LOGO
-                    // =========================================================
+                    // ======================================================
                     Center(
                       child: SizedBox(
-                        width: 300,
-                        height: 220,
+                        width: 270,
+                        height: 195,
                         child: Image.asset(
                           'assets/images/vijayagreen_logo.png',
                           fit: BoxFit.contain,
@@ -150,11 +157,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 4),
 
-                    // =========================================================
+                    // ======================================================
                     // TAGLINE
-                    // =========================================================
+                    // ======================================================
                     const Text(
                       'Simple. Smart. Green.',
                       textAlign: TextAlign.center,
@@ -165,11 +172,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 22),
 
-                    // =========================================================
+                    // ======================================================
                     // EMAIL
-                    // =========================================================
+                    // ======================================================
                     TextFormField(
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
@@ -194,11 +201,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
 
-                    // =========================================================
+                    // ======================================================
                     // PASSWORD
-                    // =========================================================
+                    // ======================================================
                     TextFormField(
                       controller: _passwordController,
                       obscureText: _obscurePassword,
@@ -238,11 +245,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       },
                     ),
 
-                    const SizedBox(height: 10),
+                    const SizedBox(height: 6),
 
-                    // =========================================================
+                    // ======================================================
                     // FORGOT PASSWORD
-                    // =========================================================
+                    // ======================================================
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
@@ -265,13 +272,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 10),
 
-                    // =========================================================
+                    // ======================================================
                     // LOGIN BUTTON
-                    // =========================================================
+                    // ======================================================
                     SizedBox(
-                      height: 54,
+                      height: 52,
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _login,
                         style: ElevatedButton.styleFrom(
@@ -311,11 +318,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 20),
 
-                    // =========================================================
-                    // DIVIDER
-                    // =========================================================
+                    // ======================================================
+                    // OR DIVIDER
+                    // ======================================================
                     Row(
                       children: [
                         Expanded(child: Divider(color: Colors.grey.shade300)),
@@ -334,11 +341,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
 
-                    // =========================================================
-                    // CREATE ACCOUNT
-                    // =========================================================
+                    // ======================================================
+                    // CREATE OWNER ACCOUNT
+                    // ======================================================
                     SizedBox(
                       height: 52,
                       child: OutlinedButton(
@@ -370,11 +377,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
 
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 22),
 
-                    // =========================================================
+                    // ======================================================
                     // FOOTER
-                    // =========================================================
+                    // ======================================================
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -395,7 +402,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ],
                     ),
 
-                    const SizedBox(height: 6),
+                    const SizedBox(height: 5),
 
                     Text(
                       'Owner Management System',
