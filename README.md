@@ -129,17 +129,43 @@ The goal is simple:
 
 ## 📱 Application Screens
 
-| Screen | Purpose |
-|---|---|
-| 🔐 **Login** | Provides access to the owner account |
-| 🏡 **Dashboard** | Displays balance, income, expenses, payments, and recent transactions |
-| 💰 **Income** | Records income and sales transactions |
-| 💸 **Expense** | Records business expenses |
-| 📒 **Ledger** | Displays and manages financial transactions |
-| 👥 **Customers** | Manages customers and receivables |
-| 🚚 **Suppliers** | Manages suppliers and payables |
-| 📊 **Reports** | Provides an overview of financial results |
-| 👤 **Profile** | Displays owner and garden information |
+## 📸 Screenshots
+
+### 🔐 Login
+
+![VijayaGreen Login](screenshots/01_login.png)
+
+### 🏡 Dashboard
+
+![VijayaGreen Dashboard](screenshots/02_dashboard.png)
+
+### 💰 Income
+
+![VijayaGreen Income](screenshots/03_income.png)
+
+### 💸 Expense
+
+![VijayaGreen Expense](screenshots/04_expense.png)
+
+### 📒 Ledger
+
+![VijayaGreen Ledger](screenshots/05_ledger.png)
+
+### 👥 Customers
+
+![VijayaGreen Customers](screenshots/06_customers.png)
+
+### 🚚 Suppliers
+
+![VijayaGreen Suppliers](screenshots/07_suppliers.png)
+
+### 📊 Reports
+
+![VijayaGreen Reports](screenshots/08_reports.png)
+
+### 👤 Profile
+
+![VijayaGreen Profile](screenshots/09_profile.png)
 
 ---
 
