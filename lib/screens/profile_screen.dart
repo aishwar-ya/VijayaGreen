@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../database/database_helper.dart';
 import 'login_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -366,6 +367,30 @@ class ProfileScreen extends StatelessWidget {
           const Divider(height: 1, color: borderGreen),
 
           _buildSettingTile(
+            icon: Icons.backup_outlined,
+            title: 'Backup Database',
+            subtitle: 'Save a copy of your VijayaGreen data',
+            onTap: () {
+              _backupDatabase(context);
+            },
+          ),
+
+          const Divider(height: 1, color: borderGreen),
+
+          _buildSettingTile(
+            icon: Icons.restore_outlined,
+            title: 'Restore Database',
+            subtitle: 'Restore data from a previous backup',
+            onTap: () {
+              _restoreDatabase(context);
+            },
+          ),
+
+          const Divider(height: 1, color: borderGreen),
+
+          const Divider(height: 1, color: borderGreen),
+
+          _buildSettingTile(
             icon: Icons.info_outline,
             title: 'About VijayaGreen',
             subtitle: 'Garden accounting application',
@@ -453,6 +478,174 @@ class ProfileScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  // ============================================================
+  // BACKUP DATABASE
+  // ============================================================
+
+  Future<void> _backupDatabase(BuildContext context) async {
+    _showLoadingDialog(context, 'Creating backup...');
+
+    final backupPath = await DatabaseHelper.instance.backupDatabase();
+
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+
+    if (!context.mounted) return;
+
+    if (backupPath != null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Database backup saved successfully 🌿'),
+          backgroundColor: deepForest,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  // ============================================================
+  // RESTORE DATABASE
+  // ============================================================
+
+  Future<void> _restoreDatabase(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: softCream,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Restore Database',
+            style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
+          ),
+          content: const Text(
+            'Restoring a backup will replace your current '
+            'VijayaGreen data. Do you want to continue?',
+            style: TextStyle(color: mutedText, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(dialogContext, false);
+              },
+              child: const Text('Cancel', style: TextStyle(color: mutedText)),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.pop(dialogContext, true);
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: mainGreen,
+                foregroundColor: Colors.white,
+              ),
+              child: const Text('Restore'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    _showLoadingDialog(context, 'Restoring database...');
+
+    final restored = await DatabaseHelper.instance.restoreDatabase();
+
+    if (context.mounted) {
+      Navigator.pop(context);
+    }
+
+    if (!context.mounted) return;
+
+    if (restored) {
+      await showDialog<void>(
+        context: context,
+        builder: (dialogContext) {
+          return AlertDialog(
+            backgroundColor: softCream,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+            ),
+            title: const Text(
+              'Restore Complete',
+              style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
+            ),
+            content: const Text(
+              'Your VijayaGreen database has been restored successfully.',
+              style: TextStyle(color: mutedText, height: 1.5),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(dialogContext);
+                },
+                child: const Text(
+                  'OK',
+                  style: TextStyle(
+                    color: mainGreen,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Database restore was cancelled or failed.'),
+          backgroundColor: errorRed,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
+  // ============================================================
+  // LOADING DIALOG
+  // ============================================================
+
+  void _showLoadingDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) {
+        return AlertDialog(
+          backgroundColor: softCream,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          content: Row(
+            children: [
+              const SizedBox(
+                width: 24,
+                height: 24,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  color: mainGreen,
+                ),
+              ),
+              const SizedBox(width: 18),
+              Expanded(
+                child: Text(
+                  message,
+                  style: const TextStyle(
+                    color: deepForest,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

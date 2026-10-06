@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -305,6 +308,86 @@ class DatabaseHelper {
     final total = result.first['total'];
 
     return total == null ? 0.0 : (total as num).toDouble();
+  }
+
+  // ============================================================
+  // BACKUP DATABASE
+  // ============================================================
+
+  Future<String?> backupDatabase() async {
+    try {
+      final db = await database;
+
+      // Make sure all pending database operations are completed.
+      await db.execute('PRAGMA wal_checkpoint(FULL)');
+
+      final databasePath = await getDatabasesPath();
+      final databaseFile = File(join(databasePath, 'vijayagreen.db'));
+
+      if (!await databaseFile.exists()) {
+        return null;
+      }
+
+      final result = await FilePicker.platform.saveFile(
+        dialogTitle: 'Save VijayaGreen Backup',
+        fileName: 'vijayagreen_backup.db',
+        type: FileType.custom,
+        allowedExtensions: ['db'],
+      );
+
+      if (result == null) {
+        return null;
+      }
+
+      final backupFile = File(result);
+      await databaseFile.copy(backupFile.path);
+
+      return backupFile.path;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // ============================================================
+  // RESTORE DATABASE
+  // ============================================================
+
+  Future<bool> restoreDatabase() async {
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        dialogTitle: 'Select VijayaGreen Backup',
+        type: FileType.custom,
+        allowedExtensions: ['db'],
+        allowMultiple: false,
+      );
+
+      if (result == null || result.files.single.path == null) {
+        return false;
+      }
+
+      final selectedBackupPath = result.files.single.path!;
+      final selectedBackup = File(selectedBackupPath);
+
+      if (!await selectedBackup.exists()) {
+        return false;
+      }
+
+      // Close the current database before replacing it.
+      await closeDatabase();
+
+      final databasePath = await getDatabasesPath();
+      final currentDatabase = File(join(databasePath, 'vijayagreen.db'));
+
+      // Replace the current database with the backup.
+      await selectedBackup.copy(currentDatabase.path);
+
+      // Reopen the restored database.
+      _database = await _initDatabase();
+
+      return true;
+    } catch (e) {
+      return false;
+    }
   }
 
   // ============================================================
