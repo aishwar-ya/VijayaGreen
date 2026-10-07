@@ -57,6 +57,13 @@ VijayaGreen follows the way the business actually runs day to day:
 
 ## ✨ Features
 
+### 🌱 Splash Screen
+- Animated splash screen shown when the app opens
+- The VijayaGreen logo fades, scales, and slides into place
+- Softly floating leaf icons in the background
+- Brand name and "Garden Accounts Made Simple" tagline
+- Automatically fades into the login screen after a short delay
+
 ### 🏠 Dashboard
 - Total income and total expenses at a glance
 - Quick actions: Add Income, Add Expense, Customers, Suppliers
@@ -166,6 +173,7 @@ VijayaGreen/
 │   ├── database/
 │   │   └── database_helper.dart
 │   └── screens/
+│       ├── splash_screen.dart
 │       ├── login_screen.dart
 │       ├── create_account_screen.dart
 │       ├── dashboard_screen.dart
