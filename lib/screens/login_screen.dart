@@ -170,21 +170,14 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: cream,
-
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-
-            // ====================================================
-            // STANDARD MOBILE WIDTH
-            // ====================================================
             child: ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 390),
-
               child: Form(
                 key: _formKey,
-
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -193,24 +186,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ==================================================
 
                     Center(
-                      child: Container(
-                        width: 270,
-                        height: 195,
-                        decoration: BoxDecoration(
-                          color: softCream,
-                          borderRadius: BorderRadius.circular(28),
-                          border: Border.all(
-                            color: gold.withValues(alpha: 0.25),
-                            width: 1,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: deepForest.withValues(alpha: 0.08),
-                              blurRadius: 18,
-                              offset: const Offset(0, 8),
-                            ),
-                          ],
-                        ),
+                      child: SizedBox(
+                        width: 300,
+                        height: 220,
                         child: Image.asset(
                           'assets/images/vijayagreen_logo.png',
                           fit: BoxFit.contain,
@@ -242,13 +220,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       textInputAction: TextInputAction.next,
-
                       decoration: _inputDecoration(
                         label: 'Email',
                         hint: 'Enter your email',
                         icon: Icons.email_outlined,
                       ),
-
                       validator: (value) {
                         final email = value?.trim() ?? '';
 
@@ -273,30 +249,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       controller: _passwordController,
                       obscureText: _obscurePassword,
                       textInputAction: TextInputAction.done,
-
                       onFieldSubmitted: (_) {
                         if (!_isLoading) {
                           _login();
                         }
                       },
-
                       decoration: _inputDecoration(
                         label: 'Password',
                         hint: 'Enter your password',
                         icon: Icons.lock_outline,
-
                         suffixIcon: IconButton(
                           tooltip: _obscurePassword
                               ? 'Show password'
                               : 'Hide password',
-
                           icon: Icon(
                             _obscurePassword
                                 ? Icons.visibility_outlined
                                 : Icons.visibility_off_outlined,
                             color: mutedText,
                           ),
-
                           onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
@@ -304,7 +275,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           },
                         ),
                       ),
-
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your password';
@@ -321,14 +291,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ==================================================
                     Align(
                       alignment: Alignment.centerRight,
-
                       child: TextButton(
                         onPressed: () {
                           _showMessage(
                             'Password recovery will be added with SQLite.',
                           );
                         },
-
                         style: TextButton.styleFrom(
                           foregroundColor: mainGreen,
                           padding: const EdgeInsets.symmetric(
@@ -336,7 +304,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             vertical: 4,
                           ),
                         ),
-
                         child: const Text(
                           'Forgot Password?',
                           style: TextStyle(fontWeight: FontWeight.w600),
@@ -351,35 +318,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ==================================================
                     SizedBox(
                       height: 52,
-
                       child: ElevatedButton(
                         onPressed: _isLoading ? null : _login,
-
                         style: ElevatedButton.styleFrom(
                           backgroundColor: deepForest,
                           foregroundColor: Colors.white,
-
                           disabledBackgroundColor: const Color(0xFF8FA596),
-
                           elevation: 3,
-
                           shadowColor: gold.withValues(alpha: 0.35),
-
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
-
                             side: const BorderSide(color: gold, width: 1),
                           ),
                         ),
-
                         child: _isLoading
                             ? const SizedBox(
                                 width: 24,
                                 height: 24,
-
                                 child: CircularProgressIndicator(
                                   strokeWidth: 2.5,
-
                                   valueColor: AlwaysStoppedAnimation<Color>(
                                     Colors.white,
                                   ),
@@ -387,12 +344,9 @@ class _LoginScreenState extends State<LoginScreen> {
                               )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
-
                                 children: [
                                   Icon(Icons.login, size: 21),
-
                                   SizedBox(width: 10),
-
                                   Text(
                                     'Login',
                                     style: TextStyle(
@@ -415,10 +369,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         Expanded(
                           child: Divider(color: gold.withValues(alpha: 0.35)),
                         ),
-
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 12),
-
                           child: Text(
                             'OR',
                             style: TextStyle(
@@ -428,7 +380,6 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-
                         Expanded(
                           child: Divider(color: gold.withValues(alpha: 0.35)),
                         ),
@@ -442,30 +393,21 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ==================================================
                     SizedBox(
                       height: 52,
-
                       child: OutlinedButton(
                         onPressed: _openCreateAccount,
-
                         style: OutlinedButton.styleFrom(
                           foregroundColor: mainGreen,
-
                           side: const BorderSide(color: gold, width: 1.5),
-
                           backgroundColor: softCream,
-
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
                         ),
-
                         child: const Row(
                           mainAxisAlignment: MainAxisAlignment.center,
-
                           children: [
                             Icon(Icons.person_add_alt_1_outlined, size: 21),
-
                             SizedBox(width: 10),
-
                             Text(
                               'Create Owner Account',
                               style: TextStyle(
@@ -485,12 +427,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     // ==================================================
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-
                       children: [
                         const Icon(Icons.eco_outlined, size: 17, color: olive),
-
                         const SizedBox(width: 6),
-
                         Text(
                           'Vijaya Garden',
                           style: TextStyle(

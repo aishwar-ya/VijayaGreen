@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite_common_ffi/sqflite_ffi.dart';
 
-import 'screens/login_screen.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,13 +30,12 @@ class VijayaGreenApp extends StatelessWidget {
 
       theme: ThemeData(
         useMaterial3: true,
-
         colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF2E7D32)),
-
         scaffoldBackgroundColor: const Color(0xFFF6FAF6),
       ),
 
-      home: const LoginScreen(),
+      // Start with animated splash screen
+      home: const SplashScreen(),
     );
   }
 }
