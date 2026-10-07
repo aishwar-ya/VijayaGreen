@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="assets/readme/intro.svg" alt="VijayaGreen - From the garden to the ledger" width="720"/>
+
 # 🌿 VijayaGreen
 
 ### *From the garden to the ledger.*
@@ -19,7 +21,6 @@ A simple, owner-focused accounting application for **Vijaya Garden**, a family-o
 - [About VijayaGreen](#-about-vijayagreen)
 - [Designed for Vijaya Garden](#-designed-for-vijaya-garden)
 - [Features](#-features)
-- [Screenshots](#-screenshots)
 - [Data Management](#-data-management)
 - [Technology Stack](#-technology-stack)
 - [Project Structure](#-project-structure)
@@ -115,30 +116,6 @@ VijayaGreen follows the way the business actually runs day to day:
 
 ---
 
-## 📸 Screenshots
-
-| Login | Dashboard |
-|:---:|:---:|
-| ![Login](screenshots/01_login.png) | ![Dashboard](screenshots/02_dashboard.png) |
-
-| Income | Expense |
-|:---:|:---:|
-| ![Income](screenshots/03_income.png) | ![Expense](screenshots/04_expense.png) |
-
-| Ledger | Customers |
-|:---:|:---:|
-| ![Ledger](screenshots/05_ledger.png) | ![Customers](screenshots/06_customers.png) |
-
-| Suppliers | Reports |
-|:---:|:---:|
-| ![Suppliers](screenshots/07_suppliers.png) | ![Reports](screenshots/08_reports.png) |
-
-| Profile |
-|:---:|
-| ![Profile](screenshots/09_profile.png) |
-
----
-
 ## 🗄️ Data Management
 
 VijayaGreen stores all business records **locally on the device** in a SQLite database named `vijayagreen.db`. There is no cloud synchronization and no server.
@@ -179,9 +156,11 @@ Notes:
 ```text
 VijayaGreen/
 ├── assets/
-│   └── images/
-│       ├── vijayagreen_icon.png
-│       └── vijayagreen_logo.png
+│   ├── images/
+│   │   ├── vijayagreen_icon.png
+│   │   └── vijayagreen_logo.png
+│   └── readme/
+│       └── intro.svg
 ├── lib/
 │   ├── main.dart
 │   ├── database/
@@ -197,7 +176,6 @@ VijayaGreen/
 │       ├── suppliers_screen.dart
 │       ├── reports_screen.dart
 │       └── profile_screen.dart
-├── screenshots/
 ├── android/
 ├── windows/
 ├── pubspec.yaml
