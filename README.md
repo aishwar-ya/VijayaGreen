@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="assets/readme/intro.svg" alt="VijayaGreen - From the garden to the ledger" width="720"/>
+<img src="assets/readme/hero.svg" alt="VijayaGreen - From the garden to the ledger" width="100%"/>
 
 # 🌿 VijayaGreen
 
@@ -54,6 +54,8 @@ VijayaGreen follows the way the business actually runs day to day:
 - **Monitoring the financial position** through the current balance and category-wise reports
 
 ---
+
+<div align="center"><img src="assets/readme/section-features.svg" alt="Everything in one ledger" width="100%"/></div>
 
 ## ✨ Features
 
@@ -123,6 +125,8 @@ VijayaGreen follows the way the business actually runs day to day:
 
 ---
 
+<div align="center"><img src="assets/readme/section-data.svg" alt="Private by design" width="100%"/></div>
+
 ## 🗄️ Data Management
 
 VijayaGreen stores all business records **locally on the device** in a SQLite database named `vijayagreen.db`. There is no cloud synchronization and no server.
@@ -167,7 +171,12 @@ VijayaGreen/
 │   │   ├── vijayagreen_icon.png
 │   │   └── vijayagreen_logo.png
 │   └── readme/
-│       └── intro.svg
+│       ├── hero.svg
+│       ├── section-features.svg
+│       ├── section-data.svg
+│       ├── section-start.svg
+│       ├── section-future.svg
+│       └── footer.svg
 ├── lib/
 │   ├── main.dart
 │   ├── database/
@@ -191,6 +200,8 @@ VijayaGreen/
 ```
 
 ---
+
+<div align="center"><img src="assets/readme/section-start.svg" alt="Dig in" width="100%"/></div>
 
 ## 🚀 Getting Started
 
@@ -251,6 +262,8 @@ build/app/outputs/flutter-apk/app-release.apk
 
 ---
 
+<div align="center"><img src="assets/readme/section-future.svg" alt="Room to grow" width="100%"/></div>
+
 ## 🔮 Future Enhancements
 
 The following are **not implemented yet**:
@@ -286,9 +299,7 @@ VijayaGreen is developed for **Vijaya Garden** and is not currently distributed 
 
 <div align="center">
 
-🌱 **VijayaGreen**
-
-Built for Vijaya Garden.
+<img src="assets/readme/footer.svg" alt="Thanks for visiting VijayaGreen" width="100%"/>
 
 *"From the garden to the ledger."*
 
