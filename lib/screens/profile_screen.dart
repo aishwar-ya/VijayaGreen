@@ -3,8 +3,17 @@ import 'package:flutter/material.dart';
 import '../database/database_helper.dart';
 import 'login_screen.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
+
 class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
+  final String ownerName;
+  final String gardenName;
+
+  const ProfileScreen({
+    super.key,
+    required this.ownerName,
+    required this.gardenName,
+  });
 
   // ============================================================
   // GOLDEN GREEN THEME
@@ -161,9 +170,9 @@ class ProfileScreen extends StatelessWidget {
 
           const SizedBox(height: 14),
 
-          const Text(
-            'ayshu',
-            style: TextStyle(
+          Text(
+            ownerName,
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 23,
               fontWeight: FontWeight.bold,
@@ -255,7 +264,7 @@ class ProfileScreen extends StatelessWidget {
           _buildInfoRow(
             icon: Icons.person_outline,
             title: 'Owner Name',
-            value: 'ayshu',
+            value: ownerName,
           ),
 
           const Divider(height: 24, color: borderGreen),
@@ -739,7 +748,7 @@ class ProfileScreen extends StatelessWidget {
   // LOGOUT DIALOG
   // ============================================================
 
-  void _showLogoutDialog(BuildContext context) {
+  Future<void> _showLogoutDialog(BuildContext context) async {
     showDialog(
       context: context,
       builder: (dialogContext) {
@@ -748,17 +757,14 @@ class ProfileScreen extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-
           title: const Text(
             'Logout',
             style: TextStyle(color: deepForest, fontWeight: FontWeight.bold),
           ),
-
           content: const Text(
             'Are you sure you want to logout?',
             style: TextStyle(color: mutedText),
           ),
-
           actions: [
             TextButton(
               onPressed: () {
@@ -766,17 +772,25 @@ class ProfileScreen extends StatelessWidget {
               },
               child: const Text('Cancel', style: TextStyle(color: mutedText)),
             ),
-
             ElevatedButton(
-              onPressed: () {
+              onPressed: () async {
+                // Close the confirmation dialog.
                 Navigator.pop(dialogContext);
 
+                // Clear only the saved login session.
+                // Do not delete the owner account or accounting data.
+                final prefs = await SharedPreferences.getInstance();
+                await prefs.remove('logged_in_owner_id');
+                await prefs.remove('logged_in_owner_email');
+
+                if (!context.mounted) return;
+
+                // Return to Login and remove previous screens.
                 Navigator.of(context).pushAndRemoveUntil(
                   MaterialPageRoute(builder: (_) => const LoginScreen()),
                   (route) => false,
                 );
               },
-
               style: ElevatedButton.styleFrom(
                 backgroundColor: errorRed,
                 foregroundColor: Colors.white,
@@ -785,7 +799,6 @@ class ProfileScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
-
               child: const Text('Logout'),
             ),
           ],

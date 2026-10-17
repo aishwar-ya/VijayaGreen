@@ -1,7 +1,10 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../database/database_helper.dart';
+import 'dashboard_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,10 +32,7 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
 
-    // ============================================================
     // LOGO ANIMATION
-    // ============================================================
-
     _logoController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -51,10 +51,7 @@ class _SplashScreenState extends State<SplashScreen>
       CurvedAnimation(parent: _logoController, curve: Curves.easeOutCubic),
     );
 
-    // ============================================================
     // FLOATING LEAVES
-    // ============================================================
-
     _leafController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 2200),
@@ -62,17 +59,52 @@ class _SplashScreenState extends State<SplashScreen>
 
     _logoController.forward();
 
-    // ============================================================
-    // GO TO LOGIN
-    // ============================================================
+    // RESTORE SESSION OR OPEN LOGIN
+    Future.delayed(const Duration(milliseconds: 2600), () async {
+      if (!mounted) return;
 
-    Future.delayed(const Duration(milliseconds: 2600), () {
+      Widget nextScreen = const LoginScreen();
+
+      try {
+        final prefs = await SharedPreferences.getInstance();
+
+        final savedOwnerId = prefs.getInt('logged_in_owner_id');
+        final savedEmail = prefs.getString('logged_in_owner_email');
+
+        if (savedOwnerId != null &&
+            savedEmail != null &&
+            savedEmail.trim().isNotEmpty) {
+          final account = await DatabaseHelper.instance.getOwnerAccountByEmail(
+            savedEmail,
+          );
+
+          final actualOwnerId = (account?['id'] as num?)?.toInt();
+
+          if (account != null && actualOwnerId == savedOwnerId) {
+            final ownerName = (account['owner_name'] as String?)?.trim();
+
+            nextScreen = DashboardScreen(
+              ownerName: ownerName == null || ownerName.isEmpty
+                  ? 'Owner'
+                  : ownerName,
+              gardenName: 'VIJAYA GARDEN',
+            );
+          } else {
+            await prefs.remove('logged_in_owner_id');
+            await prefs.remove('logged_in_owner_email');
+          }
+        }
+      } catch (_) {
+        // If session restoration fails, open Login safely.
+        nextScreen = const LoginScreen();
+      }
+
       if (!mounted) return;
 
       Navigator.of(context).pushReplacement(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) {
-            return const LoginScreen();
+            return nextScreen;
           },
           transitionDuration: const Duration(milliseconds: 600),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -96,18 +128,10 @@ class _SplashScreenState extends State<SplashScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ==========================================================
-      // CLEAN CREAM BACKGROUND
-      // ==========================================================
-
       backgroundColor: cream,
-
       body: Stack(
         children: [
-          // ========================================================
           // SUBTLE BACKGROUND GLOW
-          // ========================================================
-
           Positioned.fill(
             child: DecoratedBox(
               decoration: BoxDecoration(
@@ -120,9 +144,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
 
-          // ========================================================
           // DECORATIVE FLOATING LEAVES
-          // ========================================================
           AnimatedBuilder(
             animation: _leafController,
             builder: (context, child) {
@@ -163,9 +185,7 @@ class _SplashScreenState extends State<SplashScreen>
             },
           ),
 
-          // ========================================================
           // MAIN LOGO
-          // ========================================================
           Center(
             child: AnimatedBuilder(
               animation: _logoController,
@@ -181,12 +201,6 @@ class _SplashScreenState extends State<SplashScreen>
                   ),
                 );
               },
-
-              // IMPORTANT:
-              // No Container
-              // No border
-              // No shadow
-              // No cream box around the logo
               child: Image.asset(
                 'assets/images/vijayagreen_logo.png',
                 width: 360,
@@ -195,9 +209,7 @@ class _SplashScreenState extends State<SplashScreen>
             ),
           ),
 
-          // ========================================================
           // BOTTOM BRAND TEXT
-          // ========================================================
           Positioned(
             left: 0,
             right: 0,
@@ -207,7 +219,7 @@ class _SplashScreenState extends State<SplashScreen>
               child: const Column(
                 children: [
                   Text(
-                    'VijayaGreen',
+                    'VijayaGarden',
                     style: TextStyle(
                       color: Color(0xFF24543A),
                       fontSize: 17,
@@ -233,10 +245,7 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 
-  // ==============================================================
   // FLOATING LEAF
-  // ==============================================================
-
   Widget _buildLeaf({
     double? left,
     double? right,

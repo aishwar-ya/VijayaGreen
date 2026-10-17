@@ -15,6 +15,10 @@ dependencies:
   sqflite_common_ffi: ^2.3.6
   path: ^1.9.1
   file_picker: ^10.3.3
+  crypto: ^3.0.6
+  pdf: ^3.11.3
+  shared_preferences: ^2.5.3
+
 
   cupertino_icons: ^1.0.8
 

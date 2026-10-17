@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../database/database_helper.dart';
 import 'login_screen.dart';
 
 class CreateAccountScreen extends StatefulWidget {
@@ -61,7 +62,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
   // VALIDATE AND CREATE ACCOUNT
   // ============================================================
 
-  void createAccount() {
+  Future<void> createAccount() async {
     final gardenName = gardenNameController.text.trim();
     final ownerName = ownerNameController.text.trim();
     final phone = phoneController.text.trim();
@@ -104,7 +105,31 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
       return;
     }
 
-    // Everything is valid
+    // Check whether an owner account already exists
+    final accountExists = await DatabaseHelper.instance.ownerAccountExists();
+
+    if (!mounted) return;
+
+    if (accountExists) {
+      _showMessage('An owner account already exists. Please login instead.');
+      return;
+    }
+
+    // Save owner account securely in SQLite.
+    final result = await DatabaseHelper.instance.createOwnerAccount(
+      email: email,
+      password: password,
+      ownerName: ownerName,
+    );
+
+    if (!mounted) return;
+
+    if (result == 0) {
+      _showMessage('An account with this email already exists.');
+      return;
+    }
+
+    // Account successfully saved.
     _showAccountCreatedDialog(email);
   }
 
